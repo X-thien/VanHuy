@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  clientId: '87ac444283e74b2caa2a9be4134a8d67',
-  clientSecret: '0b8b21dbb9d84255ad0c94681ae3d56e',
-  redirectUri: 'http://localhost:4200/callback',
+  clientId: '798a845b4f654799af7c74f3cc96f2f5',
+  clientSecret: '01e02c93fad44d85ac0b081de4f63a58',
+  redirectUri: 'https://vanhuy.vercel.app/callback',
   apiConfig: 'https://api.spotify.com/v1',
   scope:
     'ugc-image-upload streaming user-read-private user-read-email user-modify-playback-state user-read-currently-playing user-library-read playlist-modify-public playlist-modify-private user-top-read user-read-playback-state',
