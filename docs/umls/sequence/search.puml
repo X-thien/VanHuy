@@ -1,0 +1,11 @@
+@startuml
+actor User
+participant "Client" as Client
+participant "Spotify API" as Spotify
+
+User -> Client: Truy cập trang search và gõ từ khóa
+Client -> Spotify: GET https://api.spotify.com/v1/search
+Spotify -> Client: Trả về kết quả tìm kiếm
+Client -> User: Hiển thị kết quả
+
+@enduml

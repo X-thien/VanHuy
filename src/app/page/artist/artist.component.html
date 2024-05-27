@@ -1,0 +1,35 @@
+<div class="main">
+  <div class="banner-img" *ngIf="artist">
+    <img [src]="artist.images[0].url" alt="" />
+    <div class="a-name">
+      <p>{{ artist.name }}</p>
+    </div>
+  </div>
+
+  <!-- <div class="play">
+    <i class="bi bi-play-fill"></i>
+  </div> -->
+
+  <div class="dashboard" *ngIf="listItems">
+    <h3>Phổ biến</h3>
+    <div class="item" *ngFor="let item of listItems; let i = index">
+      <div class="img-ct">
+        <div class="stt">
+          <p>{{ i + 1 }}</p>
+          <i class="bi bi-play-fill"></i>
+        </div>
+        <img [src]="item.album.images[2].url" alt="" />
+        <!-- eslint-disable -->
+        <p (click)="playTrack(item.id, item.uri, i); updateData(item)">
+          {{ item.name }}
+        </p>
+      </div>
+      <div class="ct-pop">
+        <p>{{ item.popularity }}</p>
+      </div>
+      <div class="ct-dur">
+        <p>{{ format(item.duration_ms) }}</p>
+      </div>
+    </div>
+  </div>
+</div>

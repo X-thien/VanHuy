@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+
+actor HeThong as HT
+actor User as User
+rectangle Playlist {
+  usecase "Hiển thị trang chủ" as Home
+  usecase "Chọn tạo Playlist" as CreatePlaylist
+  usecase "Tạo Playlist" as PlaylistResult
+}
+HT --> PlaylistResult 
+User --> Home
+User -> CreatePlaylist
+
+CreatePlaylist --> Home : include
+PlaylistResult --> CreatePlaylist: include
+@enduml

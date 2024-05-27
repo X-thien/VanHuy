@@ -1,0 +1,104 @@
+<div class="main">
+  <!-- <ng-container *ngIf="!searchValue"> -->
+  <!-- eslint-disable -->
+  <ng-container *ngIf="!searchValue; else Search">
+    <h4>Duyệt tìm</h4>
+    <div
+      class="dashboard"
+      *ngIf="data && data.playlists && data.playlists.items"
+    >
+      <div class="item" *ngFor="let item of data.playlists.items">
+        <a [routerLink]="['/playlist', item.id]">
+          <div>
+            <img [src]="item.images[0].url" alt="" />
+            <p>
+              {{ item.name }}
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #Search>
+    <div class="main-res">
+      <div class="playlist-container" *ngIf="dataArtist">
+        <h4>Kết quả hàng đầu</h4>
+        <a routerLink="/artist/{{ dataArtist.id }}">
+          <div class="playlist">
+            <img
+              *ngIf="dataArtist.images"
+              [src]="dataArtist.images[0].url"
+              alt=""
+            />
+
+            <p>{{ dataArtist.name }}</p>
+          </div>
+        </a>
+      </div>
+      <div class="track">
+        <h4>Bài hát</h4>
+
+        <div
+          class="item-artist"
+          *ngFor="let item of dataTrack.slice(0, 4); let i = index"
+        >
+          <div class="img-at">
+            <img [src]="item.album.images[2].url" alt="" />
+          </div>
+          <div class="ct">
+            <p (click)="playTrack(item.id, item.uri, i); updateData(item)">
+              {{ item.name }}
+            </p>
+            <a [routerLink]="['/artist', dataArtist.id]"
+              ><p>{{ dataArtist.name }}</p></a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <h4>Album</h4>
+    <div class="album" *ngIf="dataAlbum">
+      <div class="item-alb" *ngFor="let item of dataAlbum">
+        <a routerLink="/albums/{{ item.id }}">
+          <div>
+            <img [src]="item.images[0].url" alt="" />
+            <p class="name-album">{{ item.name }}</p>
+            <p class="name-artist">{{ item.artists[0].name }}</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <h4>Artist</h4>
+    <div class="album" *ngIf="dataArtists">
+      <div class="item-artistRea" *ngFor="let item of dataArtists">
+        <a routerLink="/artist/{{ item.id }}">
+          <div class="img-artist" *ngIf="item.images.length > 0">
+            <img [src]="item.images[0].url" alt="" />
+          </div>
+          <div class="img-artist" *ngIf="item.images.length === 0">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR-OcqUUVFS-dep5gmuom0QzAUkzK7H_mqOe_HzmYAcQ&s"
+              alt=""
+            />
+          </div>
+
+          <p>{{ item.name }}</p>
+          <!-- <p>{{item.artists[0].name}}</p> -->
+        </a>
+      </div>
+    </div>
+    <h4>Playlist</h4>
+    <div class="album" *ngIf="dataPlaylist">
+      <div class="item-alb" *ngFor="let item of dataPlaylist">
+        <a routerLink="/playlist/{{ item.id }}">
+          <div>
+            <img [src]="item.images[0].url" alt="" />
+            <p class="name-album">{{ item.name }}</p>
+            <p class="name-artist">Của {{ item.owner.display_name }}</p>
+          </div>
+          <!-- <p>{{item.artists[0].name}}</p> -->
+        </a>
+      </div>
+    </div>
+  </ng-template>
+</div>

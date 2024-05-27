@@ -1,0 +1,16 @@
+@startuml
+actor User
+participant "Client" as Client
+participant "Playlist" as Playlist
+participant "Spotify API" as Spotify
+User -> Client: Truy cập vào trang chủ và tạo playlist
+Client -> Spotify: POST https://api.spotify.com/v1/users/{user_id}/playlists 
+Spotify -> Client: Trả về kết quả tạo playlist
+Client -> User: Hiển thị kết quả
+
+User -> Playlist: Truy cập vào chọn thay đổi thông tin Playlist
+Playlist -> Spotify: PUT https://api.spotify.com/v1/playlists/{playlist_id}, PUT  https://api.spotify.com/v1/playlists/{playlist_id}/images
+Spotify -> Playlist: Trả về kết quả thay đổi thông tin
+Playlist -> User: Hiển thị kết quả
+
+@enduml

@@ -1,0 +1,144 @@
+.top-bar {
+  overflow: hidden;
+  position: absolute;
+  z-index: 100;
+  right: 0px;
+  left: 220px;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  .navbar {
+    display: flex;
+    align-items: center;
+
+    a {
+      color: #b3b3b3;
+      text-decoration: none;
+      font-weight: bold;
+      // font-size: 14px;
+      letter-spacing: 1px;
+      &:hover,
+      &:active,
+      &:focus {
+        color: #ffffff;
+      }
+    }
+    .account {
+      // position: relative;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgb(125, 75, 50);
+      color: rgb(0, 0, 0);
+      line-height: 24px;
+      padding: 2px;
+      width: auto;
+      p {
+        font-size: 10px;
+      }
+      img {
+        margin-right: 3px;
+        width: 20px;
+        height: 20px;
+      }
+      p {
+        margin: 0;
+        margin-right: 3px;
+      }
+      a {
+        margin-right: 3px;
+        line-height: 8px;
+        font-size: 8px;
+      }
+    }
+  }
+  .prev-next-buttons button {
+    color: #7a7a7a;
+    width: 34px;
+    height: 34px;
+    border-radius: 100%;
+    font-size: 18px;
+    border: 0px;
+    background-color: #090909;
+    margin-right: 10px;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: #f2f2f2;
+    }
+  }
+
+  .prev-next-buttons {
+    //    position: absolute;
+    display: flex;
+    padding: 10px;
+    .search-icon-container {
+      position: relative;
+
+      i {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 10px;
+        color: white;
+      }
+
+      input {
+        outline: none;
+        width: 200px;
+        height: 100%;
+        border-radius: 30px;
+        padding-left: 25px;
+        font-size: 13px;
+        border: none;
+        background-color: #252525;
+        color: white;
+      }
+    }
+  }
+  // padding: 14px 20px;
+}
+
+.scrolled {
+  background-color: black;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.acc-ct {
+  padding: 3px;
+  background-color: #252525;
+  position: absolute;
+  top: 60px;
+  width: 150px;
+  right: 10px;
+  z-index: 1000;
+  border-radius: 5px;
+  .ct {
+    padding: 2px;
+    display: flex;
+    a {
+      width: 100%;
+    }
+
+    button {
+      outline: none;
+      border: none;
+      color: white;
+      background: transparent;
+      font-size: 10px;
+      width: 100%;
+      padding: 3px;
+      text-align: left;
+
+      &:hover {
+        background-color: hsla(0, 0%, 100%, 0.1);
+      }
+    }
+  }
+}

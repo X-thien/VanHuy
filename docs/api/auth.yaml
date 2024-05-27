@@ -1,0 +1,72 @@
+openapi: 3.0.0
+info:
+  title: Spotify API
+  description: API for authorizing Spotify access
+  version: 1.0.0
+servers:
+  - url: https://accounts.spotify.com/
+paths:
+  /authorize:
+    get:
+      summary: ""
+      description: |
+        Cấp quyền truy cập.
+      parameters:
+        - name: client_id
+          in: query
+          description: The Client ID generated after registering your application.
+          required: true
+          schema:
+            type: string
+        - name: response_type
+          in: query
+          description: Set to code.
+          required: true
+          schema:
+            type: string
+        - name: redirect_uri
+          in: query
+          description: The URI to redirect to after the user grants or denies permission. 
+          required: true
+          schema:
+            type: string
+        - name: scope
+          in: query
+          description: The requested scopes for the access token.
+          required: true
+          schema:
+            type: string
+        - name: state
+          in: query
+          description: This provides protection against attacks such as cross-site request forgery.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+             schema:
+               type: object
+               properties:
+                access_token: 
+                  type: string
+                  description: An access token that can be provided in subsequent calls, for example to Spotify Web API services.
+                token_type:
+                  type: string
+                  description: How the access token may be used always "Bearer".
+                scope:
+                  type: string
+                  description: A space-separated list of scopes which have been granted for this access_token
+                expires_in:
+                  type: integer
+                  description: The time period (in seconds) for which the access token is valid.
+                refresh_token:
+                  type: string
+                  description: See refreshing tokens.
+
+
+                 
+
+

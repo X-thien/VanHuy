@@ -1,0 +1,19 @@
+@startuml
+actor User
+participant "Client" as Client
+participant "Spotify API" as Spotify
+
+
+
+User -> Client: Truy cập vào giao diện trang chủ
+Client -> Spotify: GET https://api.spotify.com/v1/browse/featured-playlists
+
+
+Spotify -> Client: Trả về dữ liệu top playlist
+Client -> Spotify: GET https://api.spotify.com/v1/browse/new-releases
+
+
+Spotify -> Client: Trả về dư liệu new Album 
+Client -> User: Hiển thị dữ liệu
+
+@enduml

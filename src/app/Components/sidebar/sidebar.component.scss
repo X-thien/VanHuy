@@ -1,0 +1,202 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar {
+  max-height: calc(100vh - 110px);
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  bottom: 0;
+  width: 200px;
+  .logo img {
+    width: 130px;
+  }
+  .navigation {
+    display: flex;
+
+    align-items: center;
+    padding: 10px;
+    background-color: #121212;
+    border-radius: 8px;
+    ul {
+      list-style: none;
+      margin-left: 10px;
+      li {
+        padding: 10px 0px;
+        a {
+          color: #b3b3b3;
+          text-decoration: none;
+          font-weight: bold;
+          font-size: 15px;
+          span {
+            margin-right: 30px;
+          }
+          &:hover,
+          &:active,
+          &:focus {
+            color: #ffffff;
+          }
+          &:hover i,
+          &:active i,
+          &:focus i {
+            color: #b3b3b3;
+          }
+          &:hover i:hover,
+          &:active i:hover,
+          &:focus i:hover {
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+  .navigation-1 {
+    background-color: #121212;
+    margin-top: 10px;
+    padding: 10px;
+
+    height: calc(100vh - 200px);
+    border-radius: 8px;
+    ul {
+      list-style: none;
+      margin-left: 10px;
+      li {
+        display: flex;
+        padding: 10px 0px;
+        a {
+          color: #b3b3b3;
+          text-decoration: none;
+          font-weight: bold;
+          font-size: 15px;
+          span {
+            margin-right: 30px;
+          }
+
+          &:hover,
+          &:active,
+          &:focus {
+            color: #ffffff;
+          }
+
+          &:hover i,
+          &:active i,
+          &:focus i {
+            color: #b3b3b3;
+          }
+          &:hover i:hover,
+          &:active i:hover,
+          &:focus i:hover {
+            color: #ffffff;
+          }
+        }
+        .plus {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          padding: 2px;
+          background-color: transparent;
+          border: none;
+          &:hover {
+            background-color: #252525;
+            cursor: pointer;
+          }
+          i {
+            margin: 3px;
+            color: white;
+            font-size: 15px;
+          }
+        }
+      }
+    }
+    .mainSlider {
+      height: calc(100vh - 280px);
+      width: 100%;
+      overflow: auto;
+      .playlist {
+        position: relative;
+        a {
+          text-decoration: none;
+          padding: 5px;
+          // margin-bottom: 5px;
+          display: flex;
+          gap: 7px;
+        }
+        &:hover {
+          background-color: #252525;
+          border-radius: 5px;
+        }
+        .img-playlist {
+          width: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 64px;
+          height: 64px;
+          background-color: #191919;
+          border-radius: 5px;
+          i {
+            color: white;
+          }
+          img {
+            height: 100%;
+            width: 100%;
+          }
+        }
+        .content {
+          width: calc(100% - 70px);
+          .name {
+            height: 100%;
+            display: flex;
+            // justify-content: center;
+            align-items: center;
+            p {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              color: white;
+              font-size: 15px;
+            }
+          }
+        }
+        .menu {
+          width: 70px;
+          height: 40px;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          color: white;
+          z-index: 1000;
+          background-color: black;
+          border-radius: 4px;
+          p {
+            margin: 5px;
+            padding: 3px;
+
+          }
+          // padding: 5px;
+          &:hover {
+            cursor: pointer;
+            p {
+              border-radius: 3px;
+              margin: 5px;
+              background-color: #252525;
+              padding: 3px;
+            }
+          }
+        }
+      }
+    }
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: lighten(rgb(40, 40, 40), 6%);
+  }
+}

@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+
+actor HeThong as HT
+actor User as User
+rectangle Danh_Sách {
+  usecase "Hiển thị danh sách bài hát" as Track
+  usecase "Chọn bài hát" as ChooseTrack
+  usecase "Phát nhạc" as Play
+}
+HT --> Track 
+User --> ChooseTrack
+HT --> Play
+
+ChooseTrack --> Track : include
+Play --> ChooseTrack: include
+@enduml

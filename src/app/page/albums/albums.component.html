@@ -1,0 +1,55 @@
+<div class="main">
+  <div class="banner-img" *ngIf="album">
+    <img [src]="album.images[1].url" alt="" />
+
+    <div class="content">
+      <p>{{ album.name }}</p>
+      <p>{{ album.artists[0].name }}</p>
+    </div>
+  </div>
+
+  <div class="play">
+    <i class="bi bi-play-fill"></i>
+  </div>
+  <div class="dashboard" *ngIf="track && album">
+    <div class="header-content-track">
+      <div class="stt">
+        <p>#</p>
+      </div>
+      <div class="tieu-de">
+        <p>Tiêu đề</p>
+      </div>
+
+      <div class="time"><i class="bi bi-clock"></i></div>
+    </div>
+    <hr />
+    <div class="item" *ngFor="let item of track.items; let i = index">
+      <div class="img-ct">
+        <div class="stt">
+          <p>{{ i + 1 }}</p>
+          <i class="bi bi-play-fill"></i>
+        </div>
+        <div class="artist-ct">
+          <!-- eslint-disable -->
+          <p
+            class="name-artist"
+            (click)="updateData(item); playTrack(item.id, this.album.uri, i)"
+          >
+            {{ item.name }}
+          </p>
+          <a [routerLink]="['/artist', album.artists[0].id]" class="album-name">
+            <p>{{ album.artists[0].name }}</p>
+          </a>
+        </div>
+      </div>
+      <div>
+        <!-- <p>{{ item.popularity }}</p> -->
+      </div>
+      <div class="ct.dur">
+        <p>
+          {{ format(item.duration_ms) }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

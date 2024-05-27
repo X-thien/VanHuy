@@ -1,0 +1,73 @@
+<ng-container *ngIf="token; else noToken">
+  <div class="playlist-wrapper">
+    <div class="spotify-playlists">
+      <h2>Top bài hát phổ biến</h2>
+      <div class="list">
+        <div class="item" *ngFor="let topTrack of topTracks?.playlists?.items">
+          <a
+            style="text-decoration: none"
+            [routerLink]="['/playlist', topTrack.id]"
+          >
+            <!-- eslint-disable -->
+
+            <img [src]="topTrack.images[0].url" />
+            <div class="play">
+              <i class="bi bi-play-fill"></i>
+            </div>
+            <h4>{{ topTrack.name }}</h4>
+          </a>
+        </div>
+      </div>
+      <h2 style="margin-top: 10px">Album mới phát hành</h2>
+      <div class="list" *ngIf="albumNew">
+        <div class="item" *ngFor="let newAlbum of albumNew.albums.items">
+          <a
+            style="text-decoration: none"
+            [routerLink]="['albums', newAlbum.id]"
+          >
+            <img [src]="newAlbum.images[0].url" />
+            <div class="play">
+              <i class="bi bi-play-fill"></i>
+            </div>
+            <h4>{{ newAlbum.name }}</h4>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer_left">
+          <h5>Công ty</h5>
+          <p>Giới thiệu</p>
+          <p>Việc làm</p>
+          <p>For the Record</p>
+        </div>
+        <div class="footer_left_center">
+          <h5>Cộng đồng</h5>
+          <p>Dành cho các Nghệ sĩ</p>
+          <p>Nhà phát triển</p>
+          <p>Quảng cáo</p>
+          <p>Nhà đầu tư</p>
+          <p>Nhà cung cấp</p>
+        </div>
+        <div class="footer_right_center">
+          <h5>Liên kết hữu ích</h5>
+          <p>Hỗ trợ</p>
+          <p>Ứng dụng Di động</p>
+          <p>Miễn phí</p>
+        </div>
+
+        <div class="footer-icon">
+          <i class="bi bi-instagram"></i>
+          <i class="bi bi-twitter"></i>
+          <i class="bi bi-facebook"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #noToken>
+  <div class="main">
+    <a href="/signup">Đăng ký</a>
+    <button (click)="login()" type="button">Đăng nhập</button>
+  </div></ng-template
+>

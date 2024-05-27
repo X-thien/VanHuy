@@ -1,0 +1,4000 @@
+openapi: 3.0.0
+info:
+  title: Spotify API
+  description: API for authorizing Spotify access
+  version: 1.0.0
+servers:
+  - url: https://api.spotify.com/v1/
+paths:
+  /me:
+    get: 
+      security:
+       - BearerAuth: []
+      summary: Get User info
+      description: ""
+      tags:
+        - "User"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  country: 
+                    type: string
+                    description: The country of the user
+                  display_name: 
+                    type: string
+                    description: The name displayed on the user's profile
+                  email:
+                    type: string
+                    description: The user's email address
+                  explicit_content:
+                    type: object
+                    properties:
+                      filter_enabled:
+                        type: boolean
+                        default: false
+                        description: "When true, indicates that explicit content should not be played"
+                      filter_locked:
+                        type: boolean
+                        default: false
+                        description: "When true, indicates that the explicit content setting is locked and can't be changed by the user."
+                  external_urls:
+                    type: object
+                    properties:
+                      spotify: 
+                        type: string
+                        description: The Spotify URL for the object.
+                  followers:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        description: "A link to the Web API endpoint for this user."
+                      total:
+                        type: integer
+                        description: 'The total number of followers.'
+                  images: 
+                    type: array
+                   
+                    items:
+                      type: object
+                      required:
+                        - "url"
+                        - "height"
+                        - "width"
+                      properties:
+                        url:
+                          type: string
+                          description: "The source URL of the image."
+                        height:
+                          type: integer
+                          description: The image height in pixels.
+                        width:
+                         
+                          type: integer
+                          description: The image width in pixels.
+                  product: 
+                    type: string
+                    description: The user's Spotify subscription level
+                  type:
+                    type: string
+                    description: The object type
+                  uri:
+                    type: string
+                    description: The Spotify URI for the user.
+        '401':
+            $ref: '#/components/responses/err401'
+                
+        '403':
+            $ref: '#/components/responses/err403'
+        '429':
+            $ref: '#/components/responses/err429'
+
+  /browse/featured-playlists:
+    get:
+      summary: Get top Playlist 
+      description: ""
+      security:
+        - BearerAuth: []
+      tags:
+        - "Playlist"
+      parameters:
+       - name: locale
+         in: query
+         description: The Client ID generated after registering your application.
+         schema:
+          type: string
+       - name: limit
+         in: query
+         description: The maximum number of items to return. Default 20. Minimum 1. Maximum 50
+         schema:
+          type: integer
+       - name: offer
+         in: query
+         description: The index of the first item to return. Default 0 (the first item). Use with limit to get the next set of items.
+         schema:
+          type: integer     
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+               allOf:
+                 - $ref: "#/components/schemas/data"
+                 - type: object
+                   required:
+                     - "items"
+                   properties:
+                     
+                    items:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          collaborative:
+                            type: boolean
+                            description: true if the owner allows other users to modify the playlist.
+                          description:
+                            type: string
+                            description: The playlist description. Only returned for modified, verified playlists, otherwise null.
+                          external_urls:
+                            type: object
+                            description: Known external URLs for this playlist.
+                            properties:
+                              spotify:
+                                type: string
+                                description: The Spotify URL for the object.
+                          href:
+                            type: string
+                            description: A link to the Web API endpoint providing full details of the playlist.
+                          id:
+                            type: string
+                            description: The Spotify ID for the playlist.
+                          images:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - "url"
+                                - "width"
+                                - "height"
+                              properties:
+                                url: 
+                                  type: string
+                                  description: The source URL of the image.
+                                  example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                height: 
+                                  type: integer
+                                  description: The image height in pixels.
+                                  example: 300
+                                width:
+                                  type: integer
+                                  description: The image width in pixels.
+                                  example: 300
+                          name:
+                            type: string
+                            description: The name of the playlist.
+                          owner:
+                            type: object
+                            description: the user who owns the playlist
+                            properties:
+                              external_urls:
+                                type: object
+                                description: Known external URLs for this playlist.
+                                properties:
+                                 spotify:
+                                  type: string
+                                  description: The Spotify URL for the object.
+                              followers:
+                                type: object
+                                description: Information about the followers of this user.
+                                properties:
+                                  href:
+                                    type: string
+                                  total:
+                                    type: integer
+                              href:
+                                type: string
+                                description: A link to the Web API endpoint for this user.
+                              id: 
+                                type: string
+                                description: The Spotify user ID for this user.
+                              type:
+                                type: string
+                                enum:
+                                  - user
+                              uri: 
+                                type: string
+                                description: The Spotify user ID for this user.
+                              display_name:
+                                type: string
+                                description: The name displayed on the user's profile. null if not available.
+                          public: 
+                            type: boolean
+                          snapshot_id:
+                            type: string
+                            description: The version identifier for the current playlist.
+                          tracks:
+                            type: object
+                            properties:
+                              href: 
+                                type: string
+                              total:
+                                type: integer
+                          type: 
+                            type: string
+                            description: The object type "playlist"
+                          uri: 
+                            type: string
+                            description: The Spotify URI for the playlist.               
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'
+
+        '429':
+            $ref: '#/components/responses/err429'
+               
+  /browse/new-releases:
+    get:
+      summary: Get New Album
+      description: ""
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: string
+            description: The maximum number of items to return. Default 20. Minimum 1. Maximum 50.
+            default: 20
+            minimum: 0
+            maximum: 50
+            example: 10
+        - name: offset
+          in: query
+          schema:
+            type: string
+            description: The index of the first item to return. Default 0 (the first item). Use with limit to get the next set of items.
+            default: 0
+            example: 5
+      security:
+        - BearerAuth: []
+      tags:
+        - "Album"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - "albums"
+                properties:
+                  albums:
+                    allOf:
+                      - $ref: '#/components/schemas/data'
+                      - type: object
+                        required:
+                          - "items"
+                        properties:
+                          items:
+                            type: array
+                            items: 
+                              type: object
+                              required:
+                                - "album_type"
+                                - "total_tracks"
+                                - "available_markets"
+                                - "external_urls"
+                                - "href"
+                                - "id"
+                                - "images"
+                                - "name"
+                                - "release_date"
+                                - "release_date_precision"
+                                - "type"
+                                - "uri"
+                                - "artists"
+                              properties:
+                                album_type:
+                                  type: string
+                                  description: The type of the album.
+                                  enum:
+                                    - album
+                                    - single
+                                    - compilation
+                                  example: compilation
+                                total_tracks:
+                                  type: integer
+                                  description: The number of tracks in the album.
+                                  example: 9
+                                available_markets:
+                                  type: array
+                                  description: ""
+                                  example: ["CA","BR","IT"]
+                                external_urls:
+                                  type: object
+                                  description: "Known external URLs for this album."
+                                  properties:
+                                    spotify:
+                                      type: string
+                                href:
+                                  type: string
+                                  description: A link to the Web API endpoint providing full details of the album.
+                                id: 
+                                  type: string
+                                  description: The Spotify ID for the album.
+                                  example: 2up3OPMp9Tb4dAKM2erWXQ
+                                images:
+                                  type: array
+                                  items: 
+                                    type: object
+                                    required:
+                                      - "url"
+                                      - "height"
+                                      - "width"
+                                    properties:
+                                      url:
+                                        type: string
+                                        description: The source URL of the image.
+                                        example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                      height:
+                                        type: integer
+                                        description: The image height in pixels.
+                                        example: 300
+                                      width:
+                                        type: integer
+                                        description: The image width in pixels.
+                                        example: 300
+                                name: 
+                                  type: string
+                                  description: The name of the album. In case of an album takedown, the value may be an empty string.
+                                release_date:
+                                  type: string
+                                  description: The date the album was first released.
+                                  example: 1981-12
+                                release_date_precision:
+                                  type: string
+                                  description: The precision with which release_date value is known.
+                                  enum:
+                                    - year
+                                    - month
+                                    - day
+                                  example: year
+                                restrictions: 
+                                  type: object
+                                  properties:
+                                    reason:
+                                      type: string
+                                type: 
+                                  type: string
+                                  description: The object type.
+                                  example: album
+                                uri:
+                                  type: string
+                                  description: The Spotify URI for the album.
+                                  example: spotify:album:2up3OPMp9Tb4dAKM2erWXQ
+                                artists:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                        external_urls:
+                                          type: object
+                                          properties:
+                                            spotify: 
+                                              type: string
+                                              description: The Spotify URL for the object.
+                                        href:
+                                          type: string
+                                        id:
+                                          type: string
+                                        name:
+                                          type: string
+                                        type:
+                                          type: string
+                                          enum:
+                                            - artist
+                                        uri: 
+                                          type: string     
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'
+  /albums/{id}/tracks:
+    get:
+      summary: Get Album Tracks
+      description: ""
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: string
+            description: The Spotify ID of the album.
+            example: 4aawyAB9vmqN3uQ7FjRGTy
+        - name: market
+          in: query
+          schema: 
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      security:
+        - BearerAuth: []
+      tags:
+        - "Album"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/data'
+                  - type: object
+                    required:
+                      - "items"
+                    properties: 
+                      items:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              artists:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    external_urls:
+                                      type: object
+                                      properties:
+                                        spotify: 
+                                          type: string
+                                          description: The Spotify URL for the object.
+                                    href:
+                                      type: string
+                                    id:
+                                      type: string
+                                    name:
+                                      type: string
+                                    type:
+                                      type: string
+                                      enum:
+                                        - artist
+                                    uri: 
+                                      type: string    
+                              available_markets:
+                                type: array
+                                example: [string]
+                              disc_number:
+                                type: integer
+                              duration_ms:
+                                type: integer
+                              explicit:
+                                type: boolean   
+                              external_urls:
+                                    type: object
+                                    description: Known external URLs for this artist.
+                                    properties:
+                                      spotify: 
+                                        type: string
+                              href: 
+                                    type: string
+                              id:
+                                    type: string
+                                    description: The Spotify ID for the track.
+                              is_playable:
+                                    type: boolean
+                              linked_from:
+                                    type: object
+                                    properties:
+                                      external_urls:
+                                        type: object
+                                        description: Known external URLs for this artist.
+                                        properties:
+                                          spotify: 
+                                            type: string
+                                      href:
+                                        type: string
+                                      id: 
+                                        type: string
+                                      type: 
+                                        type: string
+                                        description: The object type "track".
+                                      uri:
+                                        type: string
+                                        description: The Spotify URI for the track.
+                              restrictions: 
+                                    type: object
+                                    properties:
+                                      reason:
+                                        type: string
+                              name: 
+                                type: string    
+                              preview_url:
+                                  type: string
+                                  description: A link to a 30 second preview (MP3 format) of the track. Can be null
+                              track_number:
+                                  type: integer
+                                  description: The number of the track. If an album has several discs, the track number is the number on the specified disc.
+                              type:
+                                  type: string
+                                  description: The object type "track".
+                                  enum:
+                                    - track
+                              uri:
+                                  type: string
+                                  description: The Spotify URI for the track.
+                              is_local:
+                                  type: boolean
+  
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'
+
+  /albums/{id}:
+    get:
+      summary: Get Album Detail
+      description: ""
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: string
+            description: The Spotify ID of the album.
+            example: 4aawyAB9vmqN3uQ7FjRGTy
+        - name: market
+          in: query
+          schema: 
+            type: string
+      security:
+        - BearerAuth: []
+      tags:
+        - "Album"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - "album_type"
+                  - "total_tracks"
+                  - "available_markets"
+                  - "external_urls"
+                  - "href"
+                  - "id"
+                  - "images"
+                  - "name"
+                  - "release_date"
+                  - "release_date_precision"
+                  - "type"
+                  - "uri"
+                  - "artists"
+                  - "tracks"
+                  - "copyrights"
+                  - "external_ids"
+                  - "genres"
+                  - "label"
+                  - "popularity"
+                properties:
+                  album_type: 
+                          type: string
+                          description: The type of the album.
+                          enum:
+                            - album
+                            - single
+                            - compilation
+                          example: compilation
+                  total_tracks:
+                          type: integer
+                          description: The number of tracks in the album.
+                          example: 9
+                  available_markets:
+                          type: array
+                          description: The markets in which the album is available
+                          example:  ["CA","BR","IT"]
+                  external_urls:
+                          type: object
+                          properties:
+                            spotify: 
+                             type: string
+                             description: The Spotify URL for the object.
+                  href:
+                          type: string
+                          description: A link to the Web API endpoint providing full details of the album.
+                  id:
+                          type: string
+                          description: The Spotify ID for the album.
+                          example: 2up3OPMp9Tb4dAKM2erWXQ
+                  images: 
+                          type: array
+                          items:
+                            type: object
+                            required:
+                              - "url"
+                              - "height"
+                              - "width"
+                            properties:
+                                url:
+                                  type: string
+                                  description: "The source URL of the image."
+                                height:
+                                  type: integer
+                                  description: The image height in pixels.
+                                  example: 300
+                                width:
+                                  type: integer
+                                  description: The image width in pixels.
+                                  example: 300
+                  name:   
+                    type: string
+                    description: The name of the album. In case of an album takedown, the value may be an empty string.
+                  release_date:
+                    type: string
+                    description: The date the album was first released.
+                    example: 1981-12
+                  release_date_precision:
+                    type: string
+                    description: The precision with which release_date value is known.
+                    enum:
+                      - year
+                      - month
+                      - day
+                    example: year
+                  restrictions: 
+                    type: object
+                    properties:
+                      reason:
+                        type: string
+                        enum:
+                          - market
+                          - product
+                          - explicit
+                        example: market
+                  type:
+                    type: string
+                    description: The object type.
+                    enum:
+                      - album
+                    example: album
+                  uri:
+                    type: string
+                    description: The Spotify URI for the album.
+                    example: spotify:album:2up3OPMp9Tb4dAKM2erWXQ
+                  artists:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        external_urls:
+                          type: object
+                          properties:
+                            spotify: 
+                              type: string
+                              description: The Spotify URL for the object.
+                        href:
+                          type: string
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                            - artist
+                        uri: 
+                          type: string     
+                  tracks:
+                    allOf:
+                      - $ref: '#/components/schemas/data'
+                      - type: object
+                        required:
+                          - "items"
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                artists:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      external_urls:
+                                        type: object
+                                        properties:
+                                          spotify: 
+                                            type: string
+                                            description: The Spotify URL for the object.
+                                      href:
+                                        type: string
+                                      id:
+                                        type: string
+                                      name:
+                                        type: string
+                                      type:
+                                        type: string
+                                        enum:
+                                          - artist
+                                      uri: 
+                                        type: string    
+                                available_markets:
+                                  type: array
+                                disc_number:
+                                  type: integer
+                                duration_ms:
+                                  type: integer
+                                explicit:
+                                  type: boolean
+                                external_ids:
+                                  type: object
+                                  description: Known external IDs for the track.
+                                  properties:
+                                    isrc:
+                                      type: string
+                                    ean:
+                                      type: string
+                                    upc:
+                                      type: string
+                                external_urls:
+                                  type: object
+                                  description: Known external URLs for this artist.
+                                  properties:
+                                    spotify: 
+                                      type: string
+                                href: 
+                                  type: string
+                                id:
+                                  type: string
+                                  description: The Spotify ID for the track.
+                                is_playable:
+                                  type: boolean
+                                linked_from:
+                                  type: object
+                                restrictions: 
+                                  type: object
+                                  properties:
+                                    reason:
+                                      type: string
+                                name: 
+                                  type: string
+                                popularity:
+                                  type: integer
+                                preview_url:
+                                  type: string
+                                  description: A link to a 30 second preview (MP3 format) of the track. Can be null
+                                track_number:
+                                  type: integer
+                                  description: The number of the track. If an album has several discs, the track number is the number on the specified disc.
+                                type:
+                                  type: string
+                                  description: The object type "track".
+                                  enum:
+                                    - track
+                                uri:
+                                  type: string
+                                  description: The Spotify URI for the track.
+                                is_local:
+                                  type: boolean
+                  copyrights:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        text: 
+                          type: string
+                          description: The copyright text for this content.
+                  external_ids:
+                    type: object
+                    description: Known external IDs for the track.
+                    properties:
+                      isrc:
+                        type: string
+                      ean:
+                        type: string
+                      upc:
+                        type: string
+                  genres:
+                    type: array
+                    description: A list of the genres the album is associated with. If not yet classified, the array is empty.
+                    example: ["Egg punk","Noise rock"]
+                  label: 
+                    type: string
+                    description: The label associated with the album.
+                  popularity:
+                    type: integer
+                    description: "The popularity of the album."
+  
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'
+  /artists/{id}/top-tracks:
+    get:
+      summary: Get Artist's Top Tracks
+      description: ""
+      parameters:
+        - name: id
+          required: true
+          in: query
+          schema:
+            type: string
+            description: The Spotify ID of the album.
+            example: 4aawyAB9vmqN3uQ7FjRGTy
+        - name: market
+          in: query
+          schema: 
+            type: string
+      security:
+        - BearerAuth: []
+      tags:
+        - "Artist"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:
+                  tracks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        album:
+                          type: object
+                          required:
+                          - "album_type"
+                          - "total_tracks"
+                          - "available_markets"
+                          - "external_urls"
+                          - "href"
+                          - "id"
+                          - "images"
+                          - "name"
+                          - "release_date"
+                          - "release_date_precision"
+                          - "type"
+                          - "uri"
+                          - "artists"
+                          properties:
+                            
+                            album_type: 
+                                    type: string
+                                    description: The type of the album.
+                                    enum:
+                                      - album
+                                      - single
+                                      - compilation
+                                    example: compilation
+                            total_tracks:
+                                    type: integer
+                                    description: The number of tracks in the album.
+                                    example: 9
+                            available_markets:
+                                    type: array
+                                    description: The markets in which the album is available
+                                    example:  ["CA","BR","IT"]
+                            external_urls:
+                                    type: object
+                                    properties:
+                                      spotify: 
+                                        type: string
+                                        description: The Spotify URL for the object.
+                            href:
+                                    type: string
+                                    description: A link to the Web API endpoint providing full details of the album.
+                            id:
+                                    type: string
+                                    description: The Spotify ID for the album.
+                                    example: 2up3OPMp9Tb4dAKM2erWXQ
+                            images: 
+                                    type: array
+                                    items:
+                                      type: object
+                                      required:
+                                        - "url"
+                                        - "height"
+                                        - "width"
+                                      properties:
+                                          url:
+                                            type: string
+                                            description: "The source URL of the image."
+                                          height:
+                                            type: integer
+                                            description: The image height in pixels.
+                                            example: 300
+                                          width:
+                                            type: integer
+                                            description: The image width in pixels.
+                                            example: 300
+                            name:   
+                              type: string
+                              description: The name of the album. In case of an album takedown, the value may be an empty string.
+                            release_date:
+                              type: string
+                              description: The date the album was first released.
+                              example: 1981-12
+                            release_date_precision:
+                              type: string
+                              description: The precision with which release_date value is known.
+                              enum:
+                                - year
+                                - month
+                                - day
+                              example: year
+                            restrictions: 
+                              type: object
+                              properties:
+                                reason:
+                                  type: string
+                                  enum:
+                                    - market
+                                    - product
+                                    - explicit
+                                  example: market
+                            type:
+                              type: string
+                              description: The object type.
+                              enum:
+                                - album
+                              example: album
+                            uri:
+                              type: string
+                              description: The Spotify URI for the album.
+                              example: spotify:album:2up3OPMp9Tb4dAKM2erWXQ
+                            artists:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  external_urls:
+                                    type: object
+                                    properties:
+                                      spotify: 
+                                        type: string
+                                        description: The Spotify URL for the object.
+                                  href:
+                                    type: string
+                                  id:
+                                    type: string
+                                  name:
+                                    type: string
+                                  type:
+                                    type: string
+                                    enum:
+                                      - artist
+                                  uri: 
+                                    type: string     
+                        artists:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              external_urls:
+                                type: object
+                                properties:
+                                    spotify: 
+                                      type: string
+                                      description: The Spotify URL for the object.
+                              followers:
+                                  type: object
+                                  properties:
+                                    href:
+                                      type: string
+                                      description: "A link to the Web API endpoint for this user."
+                                    total:
+                                      type: integer
+                                      description: 'The total number of followers.'
+                              genres:
+                                type: array
+                                description: A list of the genres the artist is associated with. If not yet classified, the array is empty.
+                                example: ["Prog rock","Grunge"]
+                              href:
+                                type: string
+                                description: A link to the Web API endpoint providing full details of the artist.
+                              id:
+                                type: string
+                                description: The Spotify ID for the track.
+                              images: 
+                                type: array
+                                required:
+                                  - "url"
+                                  - "height"
+                                  - "width"
+                                items:
+                                  type: object
+                                  properties:
+                                    url:
+                                      type: string
+                                      description: "The source URL of the image."
+                                    height:
+                                      type: integer
+                                      description: The image height in pixels.
+                                    width:
+                                    
+                                      type: integer
+                                      description: The image width in pixels.
+                              name:
+                                type: string
+                                description: The name of the artist.
+                              popularity:
+                                type: integer
+                                description: The popularity of the artist.
+                                example: 0
+                              type:
+                                type: string
+                                description: The object type.
+                                enum:
+                                  - artist
+                                example: artist
+                              uri: 
+                                type: string
+                                description: The Spotify URI for the artist.
+                        available_markets:
+                          type: array
+                          description: ""
+                          example: []
+                        disc_number:
+                          type: integer
+                          description: The disc number (usually 1 unless the album consists of more than one disc).
+                          example: 0
+                        duration_ms:
+                          type: integer
+                          description: The track length in milliseconds.
+                          example: 0
+                        explicit:
+                          type: boolean
+                          description: Whether or not the track has explicit lyrics ( true = yes it does; false = no it does not OR unknown).
+                          example: false
+                        external_ids:
+                          type: object
+                          description: Known external IDs for the track.
+                          properties:
+                            isrc: 
+                              type: string
+                            ean:
+                              type: string
+                            upc:
+                              type: string
+                        external_urls:
+                          type: object
+                          properties:
+                            spotify: 
+                              type: string
+                              description: The Spotify URL for the object.
+                        href:
+                          type: string
+                          description: A link to the Web API endpoint providing full details of the track.
+                        id: 
+                          type: string
+                          description: The Spotify ID for the track.
+                        is_playable:
+                          type: boolean
+                          example: false
+                        linked_form:
+                          type: object
+                        restrictions: 
+                          type: object
+                          properties:
+                            reason:
+                              type: string
+                              enum:
+                                - market
+                                - product
+                                - explicit
+                              example: market
+                        name:
+                          type: string
+                          description: The name of the track.
+                        popularity:
+                          type: integer
+                          description: ""
+                        preview_url:
+                          type: string
+                          description: A link to a 30 second preview (MP3 format) of the track. Can be null
+                        track_number:
+                          type: integer
+                          description: The number of the track.
+                        type:
+                          type: string
+                          enum:
+                            - track
+                          example: track
+                        uri:
+                          type: string
+                          description: The Spotify URI for the track.
+                        is_local:
+                          type: boolean
+                          description: Whether or not the track is from a local file.
+
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'             
+  /me/player/play:
+    put:
+      summary: Play/Resume Music
+      description: "Start a new context or resume current playback on the user's active device"
+      parameters:
+        - name: device_id
+          in: query
+          description: "The id of the device this command is targeting. If not supplied, the user's currently active device is the target"
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                uris: 
+                  type: string
+                  description: "Optional. A JSON array of the Spotify track URIs to play"
+                  example: "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
+                content_uri: 
+                  type: string
+                  description: Optional. Spotify URI of the context to play. Valid contexts are albums, artists & playlists.
+                  example: spotify:album:1Je1IMUlBXcx1Fz0WE7oPT
+                offset:
+                  type: object
+                position_ms: 
+                  type: integer                    
+      tags:
+        - "Player"
+      responses:
+        '204': 
+          description: "Playback started"
+          
+
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'    
+  /me/player/pause:
+    put:
+      summary: Pause Music
+      description: "Start a new context or resume current playback on the user's active device"
+      parameters:
+        - name: device_id
+          in: query
+          description: "The id of the device this command is targeting. If not supplied, the user's currently active device is the target"
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      tags:
+        - "Player"
+      responses:
+        '204': 
+          description: "Playback paused"
+          
+
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'    
+  /playlists/{playlist_id}/tracks:
+    get:
+      summary: Get Playlist Items
+      description: "Start a new context or resume current playback on the user's active device"
+      parameters:
+        - name: playlist_id
+          in: query
+          description: "The Spotify ID of the playlist."
+          required: true
+          schema:
+            type: string
+        - name: market
+          in: query
+          schema:
+            type: string
+            example: ES
+        - name: fields
+          in: query
+          schema:
+            type: string
+            example: items(added_by.id,track(name,href,album(name,href)))
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            minimum: 0
+            maximum: 50
+            example: 10
+        - name: offset
+          in: query 
+          schema:
+            type: integer
+            default: 0
+            example: 5
+        - name: additional_types
+          in: query
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      tags:
+        - "Playlist"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/data'
+                  - type: object
+                    required:
+                      - "items"
+                    properties:
+                      
+                      items: 
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            added_at:
+                              type: string
+                              description: The date and time the track or episode was added. 
+                            added_by:
+                              type: object
+                              properties:
+                                external_urls:
+                                  type: object
+                                  description: "Known external URLs for this album."
+                                  properties:
+                                    spotify:
+                                      type: string
+                                      description: Known public external URLs for this user.
+                                followers:
+                                  type: object
+                                  description: Information about the followers of the artist.
+                                  properties:
+                                    href: 
+                                      type: string
+                                      description: This will always be set to null, as the Web API does not support it at the moment.
+                                    total: 
+                                      type: integer
+                                      description: This will always be set to null, as the Web API does not support it at the moment.
+                                href:
+                                  type: string
+                                  description: A link to the Web API endpoint for this user.
+                                id:
+                                  type: string
+                                  description: The Spotify user ID for this user
+                                type:
+                                  type: string
+                                  description: The object type.
+                                  enum:
+                                    - User
+                                uri: 
+                                  type: string
+                                  description: The Spotify URI for this user.
+                            is_local:
+                              type: boolean
+                              description: Whether this track or episode is a local file or not.
+                            track:
+                              type: object
+                              properties:
+                                album: 
+                                  type: object
+                                  required:
+                                    - "album_type"
+                                    - "total_tracks"
+                                    - "available_markets"
+                                    - "external_urls"
+                                    - "href"
+                                    - "id"
+                                    - "images"
+                                    - "name"
+                                    - "release_date"
+                                    - "release_date_precision"
+                                    - "type"
+                                    - "uri"
+                                    - "artists"
+                                  properties:
+                                    album_type:
+                                      type: string
+                                      description: The type of the album.
+                                      enum:
+                                        - album
+                                        - single
+                                        - compilation
+                                      example: compilation
+                                    total_tracks:
+                                      type: integer
+                                      description: The number of tracks in the album.
+                                      example: 9
+                                    available_markets:
+                                      type: array
+                                      description: ""
+                                      example: ["CA","BR","IT"]
+                                    external_urls:
+                                      type: object
+                                      description: "Known external URLs for this album."
+                                      properties:
+                                        spotify:
+                                          type: string
+                                    href:
+                                      type: string
+                                      description: A link to the Web API endpoint providing full details of the album.
+                                    id: 
+                                      type: string
+                                      description: The Spotify ID for the album.
+                                      example: 2up3OPMp9Tb4dAKM2erWXQ
+                                    images:
+                                      type: array
+                                      items: 
+                                        type: object
+                                        required:
+                                          - "url"
+                                          - "height"
+                                          - "width"
+                                        properties:
+                                          url:
+                                            type: string
+                                            description: The source URL of the image.
+                                            example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                          height:
+                                            type: integer
+                                            description: The image height in pixels.
+                                            example: 300
+                                          width:
+                                            type: integer
+                                            description: The image width in pixels.
+                                            example: 300
+                                    name: 
+                                      type: string
+                                      description: The name of the album. In case of an album takedown, the value may be an empty string.
+                                    release_date:
+                                      type: string
+                                      description: The date the album was first released.
+                                      example: 1981-12
+                                    release_date_precision:
+                                      type: string
+                                      description: The precision with which release_date value is known.
+                                      enum:
+                                        - year
+                                        - month
+                                        - day
+                                      example: year
+                                    restrictions: 
+                                      type: object
+                                      properties:
+                                        reason:
+                                          type: string
+                                    type: 
+                                      type: string
+                                      description: The object type.
+                                      example: album
+                                    uri:
+                                      type: string
+                                      description: The Spotify URI for the album.
+                                      example: spotify:album:2up3OPMp9Tb4dAKM2erWXQ
+                                    artists:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                            external_urls:
+                                              type: object
+                                              properties:
+                                                spotify: 
+                                                  type: string
+                                                  description: The Spotify URL for the object.
+                                            href:
+                                              type: string
+                                            id:
+                                              type: string
+                                            name:
+                                              type: string
+                                            type:
+                                              type: string
+                                              enum:
+                                                - artist
+                                            uri: 
+                                              type: string     
+                                artists: 
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      external_urls:
+                                        type: object
+                                        description: Known external URLs for this artist.
+                                        properties:
+                                          spotify: 
+                                            type: string
+                                      followers:
+                                        type: object
+                                        description: Information about the followers of the artist.
+                                        properties:
+                                          href: 
+                                            type: string
+                                            description: This will always be set to null, as the Web API does not support it at the moment.
+                                          total: 
+                                            type: integer
+                                            description: This will always be set to null, as the Web API does not support it at the moment.
+                                      genres:
+                                        type: array
+                                        description: A list of the genres the artist is associated with. If not yet classified, the array is empty.
+                                        example: ["Prog rock","Grunge"]
+                                      href:
+                                        type: string
+                                        description: A link to the Web API endpoint providing full details of the artist.
+                                      id: 
+                                        type: string
+                                        description: The Spotify ID for the artist.
+                                      images:
+                                        type: array
+                                        items: 
+                                          type: object
+                                          required:
+                                            - "url"
+                                            - "height"
+                                            - "width"
+                                          properties:
+                                            url:
+                                              type: string
+                                              description: The source URL of the image.
+                                              example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                            height:
+                                              type: integer
+                                              description: The image height in pixels.
+                                              example: 300
+                                            width:
+                                              type: integer
+                                              description: The image width in pixels.
+                                              example: 300
+                                      name: 
+                                        type: string   
+                                      popularity:
+                                        type: string
+                                      type:
+                                        type: string
+                                        description: The object type.
+                                        enum:
+                                          - artist
+                                      uri:
+                                        type: string
+                                        description: The Spotify URI for the artist.
+                                available_markets:
+                                  type: array
+                                  example: ["string"]
+                                disc_number:
+                                  type: integer
+                                duration_ms:
+                                  type: integer
+                                explicit:
+                                  type: boolean
+                                external_ids:
+                                  type: object
+                                  description: Known external IDs for the track.
+                                  properties:
+                                    isrc:
+                                      type: string
+                                    ean:
+                                      type: string
+                                    upc:
+                                      type: string
+                                external_urls:
+                                  type: object
+                                  description: Known external URLs for this artist.
+                                  properties:
+                                    spotify: 
+                                      type: string
+                                href: 
+                                  type: string
+                                id:
+                                  type: string
+                                  description: The Spotify ID for the track.
+                                is_playable:
+                                  type: boolean
+                                linked_from:
+                                  type: object
+                                restrictions: 
+                                  type: object
+                                  properties:
+                                    reason:
+                                      type: string
+                                name: 
+                                  type: string
+                                popularity:
+                                  type: integer
+                                preview_url:
+                                  type: string
+                                  description: A link to a 30 second preview (MP3 format) of the track. Can be null
+                                track_number:
+                                  type: integer
+                                  description: The number of the track. If an album has several discs, the track number is the number on the specified disc.
+                                type:
+                                  type: string
+                                  description: The object type "track".
+                                  enum:
+                                    - track
+                                uri:
+                                  type: string
+                                  description: The Spotify URI for the track.
+                                is_local:
+                                  type: boolean
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'    
+    post:
+      summary: Add Items to Playlist
+      description: ""
+      parameters:
+        - name: playlist_id
+          required: true
+          in: query
+          schema:
+            type: string
+            description: The Spotify ID of the playlist.
+            example: 3cEYpjA9oz9GiPac4AsH4n
+        - name: position
+          in: query
+          schema: 
+            type: string
+            example: 0
+        - name: uris
+          in: query
+          schema:
+            type: integer
+            example: potify%3Atrack%3A4iV5W9uYEdYUVa79Axb7Rh,spotify%3Atrack%3A1301WleyT98MSxVHPZCA6M
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                uris: 
+                  type: array
+                  description: "A JSON array of the Spotify URIs to add."
+                  example: ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]
+                position:
+                  type: integer
+                  example: 0
+      security:
+        - BearerAuth: []
+      tags:
+        - "Playlist"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  snapshot_id:
+                    type: string
+                    example: abc
+  
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'
+    delete:
+      summary: Remove Playlist Items
+      description: ""
+      parameters:
+        - name: playlist_id
+          required: true
+          in: query
+          schema:
+            type: string
+            description: The Spotify ID of the playlist.
+            example: 3cEYpjA9oz9GiPac4AsH4n
+       
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                tracks:
+                  type: object
+                  properties:
+                    uri: 
+                      type: array
+                      description: "A JSON array of the Spotify URIs to add."
+                      example: ["spotify:track:4iV5W9uYEdYUVa79Axb7Rh"]
+                    snapshot_id:
+                      type: string
+                      example: abc
+      security:
+        - BearerAuth: []
+      tags:
+        - "Playlist"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  snapshot_id:
+                    type: string
+                    example: abc
+  
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'
+
+  /me/player/currently-playing:
+    get:
+      summary: Get the object currently being played on the user's Spotify account.
+      description: ""
+      tags:
+        - "Player"
+      security:
+        - BearerAuth: []
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  device:
+                    type: object
+                   
+                    properties:
+                      id:
+                        type: string
+                        description: The device ID
+                      is_active: 
+                        type: boolean
+                        description: If this device is the currently active device.
+                        example: false
+                      is_private_session:
+                        type: boolean
+                        description: Whether controlling this device is restricted
+                        example: false
+                      name:
+                        type: integer
+                        description: A human-readable name for the device.
+                        example: Kitchen speaker
+                      type:
+                        type: string
+                        description: Device type, such as "computer", "smartphone" or "speaker".
+                        example: computer
+                      volume_percent:
+                        type: integer
+                        description: The current volume in percent.
+                        minimum: 0
+                        maximum: 100
+                        example: 59
+                      supports_volume:
+                        type: boolean
+                        description: If this device can be used to set the volume.
+                        example: false 
+                  repeat_state: 
+                    type: string
+                    description: off, track, context
+                  shuffle_state: 
+                    type: boolean
+                    description: If shuffle is on or off.
+                    example: false
+                  context:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: The object type, e.g. "artist", "playlist", "album", "show".
+                      href:
+                        type: string
+                        description: A link to the Web API endpoint providing full details of the track.
+                      external_urls:
+                        type: object
+                        description: External URLs for this context.
+                        properties:
+                          spotify:
+                            type: string
+                            description: The Spotify URI for the context.
+                  timestamp: 
+                    type: integer
+                    description: Unix Millisecond Timestamp when data was fetched.
+                    example: 0
+                  progress_ms:
+                    type: integer
+                    description: Progress into the currently playing track or episode. Can be null.
+                    example: 0
+                  is_playing:
+                    type: boolean
+                    description: If something is currently playing, return true.
+                    example: false
+                  item:
+                    type: object
+                    properties:
+                      album: 
+                        type: object
+                        required:
+                          - "album_type"
+                          - "total_tracks"
+                          - "available_markets"
+                          - "external_urls"
+                          - "href"
+                          - "id"
+                          - "images"
+                          - "name"
+                          - "release_date"
+                          - "release_date_precision"
+                          - "type"
+                          - "uri"
+                          - "artist"
+                        properties:
+                          album_type: 
+                            type: string
+                            description: The type of the album.
+                            enum:
+                              - album
+                              - single
+                              - compilation
+                            example: compilation
+                          total_tracks:
+                            type: integer
+                            description: The number of tracks in the album.
+                            example: 9
+                          available_markets:
+                            type: array
+                            description: The markets in which the album is available
+                            example:  ["CA","BR","IT"]
+                          external_urls:
+                            type: object
+                            properties:
+                              spotify: 
+                                type: string
+                                description: The Spotify URL for the object.
+                          href:
+                            type: string
+                            description: A link to the Web API endpoint providing full details of the album.
+                          id:
+                            type: string
+                            description: The Spotify ID for the album.
+                            example: 2up3OPMp9Tb4dAKM2erWXQ
+                          images: 
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - "url"
+                                - "height"
+                                - "width"
+                              properties:
+                                url:
+                                  type: string
+                                  description: "The source URL of the image."
+                                height:
+                                  type: integer
+                                  description: The image height in pixels.
+                                  example: 300
+                                width:
+                                  type: integer
+                                  description: The image width in pixels.
+                                  example: 300
+                          name:   
+                            type: string
+                            description: The name of the album. In case of an album takedown, the value may be an empty string.
+                          release_date:
+                            type: string
+                            description: The date the album was first released.
+                            example: 1981-12
+                          release_date_precision:
+                            type: string
+                            description: The precision with which release_date value is known.
+                            enum:
+                              - year
+                              - month
+                              - day
+                            example: year
+                          restrictions: 
+                              type: object
+                              properties:
+                                reason:
+                                  type: string
+                                  enum:
+                                    - market
+                                    - product
+                                    - explicit
+                                  example: market
+                          type:
+                            type: string
+                            description: The object type.
+                            enum:
+                              - album
+                            example: album
+                          uri:
+                            type: string
+                            description: The Spotify URI for the album.
+                            example: spotify:album:2up3OPMp9Tb4dAKM2erWXQ
+                          artists:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                    external_urls:
+                                      type: object
+                                      properties:
+                                        spotify: 
+                                          type: string
+                                          description: The Spotify URL for the object.
+                                    href:
+                                      type: string
+                                    id:
+                                      type: string
+                                    name:
+                                      type: string
+                                    type:
+                                      type: string
+                                      enum:
+                                        - artist
+                                    uri: 
+                                      type: string     
+                      artists:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                             external_urls:
+                              type: object
+                              properties:
+                                  spotify: 
+                                    type: string
+                                    description: The Spotify URL for the object.
+                             followers:
+                                type: object
+                                properties:
+                                  href:
+                                    type: string
+                                    description: "A link to the Web API endpoint for this user."
+                                  total:
+                                    type: integer
+                                    description: 'The total number of followers.'
+                             genres:
+                              type: array
+                              description: A list of the genres the artist is associated with. If not yet classified, the array is empty.
+                              example: ["Prog rock","Grunge"]
+                             href:
+                              type: string
+                              description: A link to the Web API endpoint providing full details of the artist.
+                             id:
+                              type: string
+                              description: The Spotify ID for the track.
+                             images: 
+                              type: array
+                              items:
+                                type: object
+                                required:
+                                  - "url"
+                                  - "height"
+                                  - "width"
+                                properties:
+                                  url:
+                                    type: string
+                                    description: "The source URL of the image."
+                                  height:
+                                    type: integer
+                                    description: The image height in pixels.
+                                  width:
+                                  
+                                    type: integer
+                                    description: The image width in pixels.
+                             name:
+                              type: string
+                              description: The name of the artist.
+                             popularity:
+                              type: integer
+                              description: The popularity of the artist.
+                              example: 0
+                             type:
+                              type: string
+                              description: The object type.
+                              enum:
+                                - artist
+                              example: artist
+                             uri: 
+                              type: string
+                              description: The Spotify URI for the artist.
+
+                      currently_playing_type:
+                        type: string
+                        description: The object type of the currently playing item. Can be one of track, episode, ad or unknown.
+                      actions:
+                        type: object
+                        properties:
+                          interrupting_playback:
+                            type: boolean
+                            description: Optional 
+                            example: false
+                          pausing: 
+                            type: boolean
+                            description: Pausing. Optional field.
+                            example: false
+                          resuming:
+                            type: boolean
+                            description: Resuming. Optional field.
+                            example: false
+                          seeking: 
+                            type: boolean
+                            description: Seeking playback location. Optional field.
+                            example: false
+                          skipping_next:
+                            type: boolean
+                            description: Skipping to the next context. Optional field.
+                            example: false
+                          skipping_prev:
+                            type: boolean
+                            description: toggling_repeat_context
+                            example: false
+                          toggling_shuffle:
+                            type: boolean
+                            description: Toggling shuffle flag. Optional field.
+                            example: false
+                          toggling_repeat_track: 
+                            type: boolean
+                            description: Toggling repeat track flag. Optional field.
+                            example: false
+                          transferring_playback:
+                            type: boolean
+                            description: Transfering playback between devices. Optional field.
+                            example: false
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'         
+  /playlists/{playlist_id}:
+    get:
+      summary: Get a playlist owned by a Spotify user.
+      description: ""
+      parameters:
+        - name: playlist_id
+          in: query
+          required: true
+          schema:
+            type: string
+            description: The Spotify ID of the playlist.
+            example: 3cEYpjA9oz9GiPac4AsH4n
+        - name: market
+          in: query
+          schema:
+            type: string
+            description: ""
+        - name: fields
+          in: query
+          schema:
+            type: string
+            example: items(added_by.id,track(name,href,album(name,href)))
+        - name: additional_types
+          in: query
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      
+      tags:
+        - "Playlist"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                      collaborative:
+                        type: boolean
+                        description: true if the owner allows other users to modify the playlist.
+                        example: false
+                      description:
+                        type: string
+                        description: The playlist description. Only returned for modified, verified playlists, otherwise null.
+                      external_urls:
+                        type: object
+                        properties:
+                          spotify: 
+                            type: string
+                            description: The Spotify URL for the object.
+                      followers:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                            description: "A link to the Web API endpoint for this user."
+                          total:
+                            type: integer
+                            description: 'The total number of followers.'
+                      href:
+                        type: string
+                        description: A link to the Web API endpoint providing full details of the playlist.
+                      id:
+                        type: string
+                        description: The Spotify ID for the playlist.
+                      images: 
+                        type: array
+                      
+                        items:
+                          type: object
+                          required:
+                            - "url"
+                            - "height"
+                            - "width"
+                          properties:
+                            url:
+                              type: string
+                              description: "The source URL of the image."
+                            height:
+                              type: integer
+                              description: The image height in pixels.
+                            width:
+                            
+                              type: integer
+                              description: The image width in pixels.
+                      name: 
+                        type: string
+                        description: The name of the playlist.
+                      owner:
+                        type: object
+                        description: the user who owns the playlist
+                        properties:
+                          external_urls:
+                            type: object
+                            description: Known external URLs for this playlist.
+                            properties:
+                             spotify:
+                              type: string
+                              description: The Spotify URL for the object.
+                          followers:
+                            type: object
+                            description: Information about the followers of this user.
+                            properties:
+                              href:
+                                type: string
+                              total:
+                                type: integer
+                          href:
+                            type: string
+                            description: A link to the Web API endpoint for this user.
+                          id: 
+                            type: string
+                            description: The Spotify user ID for this user.
+                          type:
+                            type: string
+                            enum:
+                              - user
+                          uri: 
+                            type: string
+                            description: The Spotify user ID for this user.
+                          display_name:
+                            type: string
+                            description: The name displayed on the user's profile. null if not available.
+                      public:   
+                        type: boolean
+                        description: The playlist's public/private status true the playlist is public, false the playlist is private, null the playlist status is not relevant.
+                        example: false
+                      snapshot_id:
+                        type: string
+                        description: The version identifier for the current playlist. Can be supplied in other requests to target a specific playlist version
+                      tracks:
+                        allOf:
+                          - $ref: '#/components/schemas/data'
+                          - type: object
+                            required:
+                              - "items"
+                            properties:
+                              items:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    added_at:
+                                      type: string
+                                      description: The date and time the track or episode was added. 
+                                    added_by:
+                                      type: object
+                                      properties:
+                                        external_urls:
+                                          type: object
+                                          description: "Known external URLs for this album."
+                                          properties:
+                                            spotify:
+                                              type: string
+                                              description: Known public external URLs for this user.
+                                        followers:
+                                          type: object
+                                          description: Information about the followers of the artist.
+                                          properties:
+                                            href: 
+                                              type: string
+                                              description: This will always be set to null, as the Web API does not support it at the moment.
+                                            total: 
+                                              type: integer
+                                              description: This will always be set to null, as the Web API does not support it at the moment.
+                                        href:
+                                          type: string
+                                          description: A link to the Web API endpoint for this user.
+                                        id:
+                                          type: string
+                                          description: The Spotify user ID for this user
+                                        type:
+                                          type: string
+                                          description: The object type.
+                                          enum:
+                                            - User
+                                        uri: 
+                                          type: string
+                                          description: The Spotify URI for this user.
+                                    is_local:
+                                      type: boolean
+                                      description: Whether this track or episode is a local file or not.
+                                    track:
+                                      type: object
+                                      properties:
+                                        album: 
+                                          type: object
+                                          required:
+                                            - "album_type"
+                                            - "total_tracks"
+                                            - "available_markets"
+                                            - "external_urls"
+                                            - "href"
+                                            - "id"
+                                            - "images"
+                                            - "name"
+                                            - "release_date"
+                                            - "release_date_precision"
+                                            - "type"
+                                            - "uri"
+                                            - "artists"
+                                          properties:
+                                            album_type:
+                                              type: string
+                                              description: The type of the album.
+                                              enum:
+                                                - album
+                                                - single
+                                                - compilation
+                                              example: compilation
+                                            total_tracks:
+                                              type: integer
+                                              description: The number of tracks in the album.
+                                              example: 9
+                                            available_markets:
+                                              type: array
+                                              description: ""
+                                              example: ["CA","BR","IT"]
+                                            external_urls:
+                                              type: object
+                                              description: "Known external URLs for this album."
+                                              properties:
+                                                spotify:
+                                                  type: string
+                                            href:
+                                              type: string
+                                              description: A link to the Web API endpoint providing full details of the album.
+                                            id: 
+                                              type: string
+                                              description: The Spotify ID for the album.
+                                              example: 2up3OPMp9Tb4dAKM2erWXQ
+                                            images:
+                                              type: array
+                                              items: 
+                                                type: object
+                                                required:
+                                                  - "url"
+                                                  - "height"
+                                                  - "width"
+                                                properties:
+                                                  url:
+                                                    type: string
+                                                    description: The source URL of the image.
+                                                    example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                                  height:
+                                                    type: integer
+                                                    description: The image height in pixels.
+                                                    example: 300
+                                                  width:
+                                                    type: integer
+                                                    description: The image width in pixels.
+                                                    example: 300
+                                            name: 
+                                              type: string
+                                              description: The name of the album. In case of an album takedown, the value may be an empty string.
+                                            release_date:
+                                              type: string
+                                              description: The date the album was first released.
+                                              example: 1981-12
+                                            release_date_precision:
+                                              type: string
+                                              description: The precision with which release_date value is known.
+                                              enum:
+                                                - year
+                                                - month
+                                                - day
+                                              example: year
+                                            restrictions: 
+                                              type: object
+                                              properties:
+                                                reason:
+                                                  type: string
+                                            type: 
+                                              type: string
+                                              description: The object type.
+                                              example: album
+                                            uri:
+                                              type: string
+                                              description: The Spotify URI for the album.
+                                              example: spotify:album:2up3OPMp9Tb4dAKM2erWXQ
+                                            artists:
+                                              type: array
+                                              items:
+                                                type: object
+                                                properties:
+                                                    external_urls:
+                                                      type: object
+                                                      properties:
+                                                        spotify: 
+                                                          type: string
+                                                          description: The Spotify URL for the object.
+                                                    href:
+                                                      type: string
+                                                    id:
+                                                      type: string
+                                                    name:
+                                                      type: string
+                                                    type:
+                                                      type: string
+                                                      enum:
+                                                        - artist
+                                                    uri: 
+                                                      type: string     
+                                        artists: 
+                                          type: array
+                                          items:
+                                            type: object
+                                            properties:
+                                              external_urls:
+                                                type: object
+                                                description: Known external URLs for this artist.
+                                                properties:
+                                                  spotify: 
+                                                    type: string
+                                              followers:
+                                                type: object
+                                                description: Information about the followers of the artist.
+                                                properties:
+                                                  href: 
+                                                    type: string
+                                                    description: This will always be set to null, as the Web API does not support it at the moment.
+                                                  total: 
+                                                    type: integer
+                                                    description: This will always be set to null, as the Web API does not support it at the moment.
+                                              genres:
+                                                type: array
+                                                description: A list of the genres the artist is associated with. If not yet classified, the array is empty.
+                                                example: ["Prog rock","Grunge"]
+                                              href:
+                                                type: string
+                                                description: A link to the Web API endpoint providing full details of the artist.
+                                              id: 
+                                                type: string
+                                                description: The Spotify ID for the artist.
+                                              images:
+                                                type: array
+                                                items: 
+                                                  type: object
+                                                  required:
+                                                    - "url"
+                                                    - "height"
+                                                    - "width"
+                                                  properties:
+                                                    url:
+                                                      type: string
+                                                      description: The source URL of the image.
+                                                      example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                                    height:
+                                                      type: integer
+                                                      description: The image height in pixels.
+                                                      example: 300
+                                                    width:
+                                                      type: integer
+                                                      description: The image width in pixels.
+                                                      example: 300
+                                              name: 
+                                                type: string   
+                                              popularity:
+                                                type: string
+                                              type:
+                                                type: string
+                                                description: The object type.
+                                                enum:
+                                                  - artist
+                                              uri:
+                                                type: string
+                                                description: The Spotify URI for the artist.
+                                        available_markets:
+                                          type: array
+                                          example: ["string"]
+                                        disc_number:
+                                          type: integer
+                                        duration_ms:
+                                          type: integer
+                                        explicit:
+                                          type: boolean
+                                        external_ids:
+                                          type: object
+                                          description: Known external IDs for the track.
+                                          properties:
+                                            isrc:
+                                              type: string
+                                            ean:
+                                              type: string
+                                            upc:
+                                              type: string
+                                        external_urls:
+                                          type: object
+                                          description: Known external URLs for this artist.
+                                          properties:
+                                            spotify: 
+                                              type: string
+                                        href: 
+                                          type: string
+                                        id:
+                                          type: string
+                                          description: The Spotify ID for the track.
+                                        is_playable:
+                                          type: boolean
+                                        linked_from:
+                                          type: object
+                                        restrictions: 
+                                          type: object
+                                          properties:
+                                            reason:
+                                              type: string
+                                        name: 
+                                          type: string
+                                        popularity:
+                                          type: integer
+                                        preview_url:
+                                          type: string
+                                          description: A link to a 30 second preview (MP3 format) of the track. Can be null
+                                        track_number:
+                                          type: integer
+                                          description: The number of the track. If an album has several discs, the track number is the number on the specified disc.
+                                        type:
+                                          type: string
+                                          description: The object type "track".
+                                          enum:
+                                            - track
+                                        uri:
+                                          type: string
+                                          description: The Spotify URI for the track.
+                                        is_local:
+                                          type: boolean
+                      type: 
+                        type: string
+                        description: The object type "playlist"
+                      uri:
+                        type: string
+                        description: The Spotify URI for the playlist.
+                      
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'  
+    put:
+      summary: Change Playlist Details
+      description: "Change a playlist's name and public/private state. (The user must, of course, own the playlist.)"
+      parameters:
+        - name: playlist_id
+          required: true
+          in: query
+          description: "The Spotify ID of the playlist."
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                name: 
+                  type: string
+                  description: "The new name for the playlist, for example 'My New Playlist Title'"
+                  example: "My New Playlist Title"
+                public: 
+                  type: boolean
+                  description: If true the playlist will be public, if false it will be private.
+                collaborative:
+                  type: boolean
+                  description: If true, the playlist will become collaborative and other users will be able to modify the playlist in their Spotify client.
+                description: 
+                  type: string
+                  description: Value for playlist description as displayed in Spotify Clients and in the Web API.   
+      security:
+        - BearerAuth: []
+      tags:
+        - "Playlist"
+      responses:
+        '200': 
+          description: Playlist updated
+        '401':
+          $ref: '#/components/responses/err401'
+        '403':
+          $ref: '#/components/responses/err403'            
+        '429':
+          $ref: '#/components/responses/err429'    
+
+  /artists/{id}:
+    get:
+      summary: Get Artist
+      description: "Start a new context or resume current playback on the user's active device"
+      parameters:
+        - name: id
+          required: true
+          in: query
+          description: "The Spotify ID of the artist."
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      tags:
+        - "Artist"
+      responses:
+        '200': 
+          description: ""
+          content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                   external_urls:
+                    type: object
+                    properties:
+                      spotify: 
+                        type: string
+                        description: The Spotify URL for the object.
+                   followers:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        description: "A link to the Web API endpoint for this user."
+                      total:
+                        type: integer
+                        description: 'The total number of followers.'
+                   genres:
+                    type: array
+                    description: A list of the genres the album is associated with. If not yet classified, the array is empty.
+                    example: ["Prog rock","Grunge"]
+                   href:
+                    type: string
+                    description: A link to the Web API endpoint providing full details of the artist."
+                   id:
+                    type: string
+                    description: The Spotify ID for the artist.
+                   images: 
+                    type: array
+                   
+                    items:
+                      type: object
+                      required:
+                        - "url"
+                        - "height"
+                        - "width"
+                      properties:
+                        url:
+                          type: string
+                          description: "The source URL of the image."
+                        height:
+                          type: integer
+                          description: The image height in pixels.
+                        width:
+                         
+                          type: integer
+                          description: The image width in pixels.
+                   name:  
+                    type: string
+                    description: The name of the artist.
+                   popularity:
+                    type: integer
+                    description: The popularity of the artist.
+                   type:
+                    type: string
+                    enum:
+                      - artist
+                    description: The object type.
+                   uri: 
+                    type: string
+                    description: The Spotify URI for the artist.
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'    
+  /playlists/{playlist_id}/images:
+    get:
+      summary: Get Playlist Cover Image
+      description: "Start a new context or resume current playback on the user's active device"
+      parameters:
+        - name: playlist_id
+          required: true
+          in: query
+          description: "The Spotify ID of the playlist."
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      tags:
+        - "Playlist"
+      responses:
+        '200': 
+          description: ""
+          content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                        - "url"
+                        - "height"
+                        - "width"
+                    properties:
+                        url:
+                          type: string
+                          description: "The source URL of the image."
+                          example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                        height:
+                          type: integer
+                          description: The image height in pixels.
+                        width:
+                         
+                          type: integer
+                          description: The image width in pixels.
+                  
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'    
+  /me/player/next:
+    post:
+      summary: Skip To Next
+      description: "Start a new context or resume current playback on the user's active device"
+      parameters:
+        - name: device_id
+          in: query
+          description: "The id of the device this command is targeting. If not supplied, the user's currently active device is the target"
+          schema:
+            type: string
+      security:
+        - BearerAuth: []                
+      tags:
+        - "Player"
+      responses:
+        '204': 
+          description: Command sent
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'     
+  /me/player/previous:
+    post:
+      summary: Skip To Previous
+      description: "Start a new context or resume current playback on the user's active device"
+      parameters:
+        - name: device_id
+          in: query
+          description: "The id of the device this command is targeting. If not supplied, the user's currently active device is the target"
+          schema:
+            type: string
+      security:
+        - BearerAuth: []                
+      tags:
+        - "Player"
+      responses:
+        '204': 
+          description: Command sent
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429' 
+  /me/player/seek:
+    put:
+      summary: Seek To Position
+      description: "Seeks to the given position in the user’s currently playing track."
+      parameters:
+        - name: position_ms
+          in: query
+          required: true
+          schema: 
+            type: integer
+          
+        - name: device_id
+          in: query
+          description: "The id of the device this command is targeting. If not supplied, the user's currently active device is the target"
+          schema:
+            type: string
+      security:
+        - BearerAuth: []                
+      tags:
+        - "Player"
+      responses:
+        '204': 
+          description: Command sent
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429' 
+  /search:
+    get:
+      summary: Search
+      description: ""
+      tags:
+        - "Search"
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Your search query.
+          required: true
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - album
+              - artist
+              - playlist
+              - track
+              - show
+              - episode
+              - audiobook
+        - name: market
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: string
+            default: 20
+            minimum: 0
+            maximum: 50
+            example: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+            maximum: 1000
+            example: 5
+        - name: include_external
+          in: query
+          schema:
+            type: string
+            enum:
+              - audio          
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  track:
+                   allOf:
+                    - $ref: '#/components/schemas/data'
+                    - type: object
+                      required:
+                        - "items"
+                      properties:
+                    
+                       items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            album:
+                              type: object
+                              properties:
+                                
+                                album_type:
+                                  type: string
+                                  description: The type of the album.
+                                  enum:
+                                    - album
+                                    - single
+                                    - compilation
+                                  example: compilation
+                                total_tracks:
+                                  type: integer
+                                  description: The number of tracks in the album.
+                                  example: 9
+                                available_markets:
+                                  type: array
+                                  description: ""
+                                  example: ["CA","BR","IT"]
+                                external_urls:
+                                  type: object
+                                  description: "Known external URLs for this album."
+                                  properties:
+                                    spotify:
+                                      type: string
+                                href:
+                                  type: string
+                                  description: A link to the Web API endpoint providing full details of the album.
+                                id: 
+                                  type: string
+                                  description: The Spotify ID for the album.
+                                  example: 2up3OPMp9Tb4dAKM2erWXQ
+                                images:
+                                  type: array
+                                  items: 
+                                    type: object
+                                    required:
+                                      - "url"
+                                      - "height"
+                                      - "width"
+                                    properties:
+                                      url:
+                                        type: string
+                                        description: The source URL of the image.
+                                        example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                      height:
+                                        type: integer
+                                        description: The image height in pixels.
+                                        example: 300
+                                      width:
+                                        type: integer
+                                        description: The image width in pixels.
+                                        example: 300
+                                name: 
+                                  type: string
+                                  description: The name of the album. In case of an album takedown, the value may be an empty string.
+                                release_date:
+                                  type: string
+                                  description: The date the album was first released.
+                                  example: 1981-12
+                                release_date_precision:
+                                  type: string
+                                  description: The precision with which release_date value is known.
+                                  enum:
+                                    - year
+                                    - month
+                                    - day
+                                  example: year
+                                restrictions: 
+                                  type: object
+                                  properties:
+                                    reason:
+                                      type: string
+                                type: 
+                                  type: string
+                                  description: The object type.
+                                  example: album
+                                uri:
+                                  type: string
+                                  description: The Spotify URI for the album.
+                                  example: spotify:album:2up3OPMp9Tb4dAKM2erWXQ
+                                artists:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                        external_urls:
+                                          type: object
+                                          properties:
+                                            spotify: 
+                                              type: string
+                                              description: The Spotify URL for the object.
+                                        href:
+                                          type: string
+                                        id:
+                                          type: string
+                                        name:
+                                          type: string
+                                        type:
+                                          type: string
+                                          enum:
+                                            - artist
+                                        uri: 
+                                          type: string     
+                            artists:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    external_urls:
+                                      type: object
+                                      properties:
+                                          spotify: 
+                                            type: string
+                                            description: The Spotify URL for the object.
+                                    followers:
+                                        type: object
+                                        properties:
+                                          href:
+                                            type: string
+                                            description: "A link to the Web API endpoint for this user."
+                                          total:
+                                            type: integer
+                                            description: 'The total number of followers.'
+                                    genres:
+                                      type: array
+                                      description: A list of the genres the artist is associated with. If not yet classified, the array is empty.
+                                      example: ["Prog rock","Grunge"]
+                                    href:
+                                      type: string
+                                      description: A link to the Web API endpoint providing full details of the artist.
+                                    id:
+                                      type: string
+                                      description: The Spotify ID for the track.
+                                    images: 
+                                      type: array
+                                      required:
+                                        - "url"
+                                        - "height"
+                                        - "width"
+                                      items:
+                                        type: object
+                                        properties:
+                                          url:
+                                            type: string
+                                            description: "The source URL of the image."
+                                          height:
+                                            type: integer
+                                            description: The image height in pixels.
+                                          width:
+                                          
+                                            type: integer
+                                            description: The image width in pixels.
+                                    name:
+                                      type: string
+                                      description: The name of the artist.
+                                    popularity:
+                                      type: integer
+                                      description: The popularity of the artist.
+                                      example: 0
+                                    type:
+                                      type: string
+                                      description: The object type.
+                                      enum:
+                                        - artist
+                                      example: artist
+                                    uri: 
+                                      type: string
+                                      description: The Spotify URI for the artist.
+                            available_markets:
+                              type: array
+                              description: ""
+                              example: []
+                            disc_number:
+                              type: integer
+                              description: The disc number (usually 1 unless the album consists of more than one disc).
+                              example: 0
+                            duration_ms:
+                              type: integer
+                              description: The track length in milliseconds.
+                              example: 0
+                            explicit:
+                              type: boolean
+                              description: Whether or not the track has explicit lyrics ( true = yes it does; false = no it does not OR unknown).
+                              example: false
+                            external_ids:
+                              type: object
+                              description: Known external IDs for the track.
+                              properties:
+                                isrc: 
+                                  type: string
+                                ean:
+                                  type: string
+                                upc:
+                                  type: string
+                            external_urls:
+                              type: object
+                              properties:
+                                spotify: 
+                                  type: string
+                                  description: The Spotify URL for the object.
+                            href:
+                              type: string
+                              description: A link to the Web API endpoint providing full details of the track.
+                            id: 
+                              type: string
+                              description: The Spotify ID for the track.
+                            is_playable:
+                              type: boolean
+                              example: false
+                            linked_form:
+                              type: object
+                            restrictions: 
+                              type: object
+                              properties:
+                                reason:
+                                  type: string
+                                  enum:
+                                    - market
+                                    - product
+                                    - explicit
+                                  example: market
+                            name:
+                              type: string
+                              description: The name of the track.
+                            popularity:
+                              type: integer
+                              description: ""
+                            preview_url:
+                              type: string
+                              description: A link to a 30 second preview (MP3 format) of the track. Can be null
+                            track_number:
+                              type: integer
+                              description: The number of the track.
+                            type:
+                              type: string
+                              enum:
+                                - track
+                              example: track
+                            uri:
+                              type: string
+                              description: The Spotify URI for the track.
+                            is_local:
+                              type: boolean
+                              description: Whether or not the track is from a local file.
+                  artists:
+                       allOf:
+                        - $ref: '#/components/schemas/data'
+                        - type: object
+                          required:
+                            - "items"
+                          properties:
+                            items:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  external_urls:
+                                    type: object
+                                    properties:
+                                        spotify: 
+                                          type: string
+                                          description: The Spotify URL for the object.
+                                  followers:
+                                      type: object
+                                      properties:
+                                        href:
+                                          type: string
+                                          description: "A link to the Web API endpoint for this user."
+                                        total:
+                                          type: integer
+                                          description: 'The total number of followers.'
+                                  genres:
+                                    type: array
+                                    description: A list of the genres the artist is associated with. If not yet classified, the array is empty.
+                                    example: ["Prog rock","Grunge"]
+                                  href:
+                                    type: string
+                                    description: A link to the Web API endpoint providing full details of the artist.
+                                  id:
+                                    type: string
+                                    description: The Spotify ID for the track.
+                                  images: 
+                                    type: array
+                                    items:
+                                      type: object
+                                      required:
+                                        - "url"
+                                        - "height"
+                                        - "width"
+                                      properties:
+                                        url:
+                                          type: string
+                                          description: "The source URL of the image."
+                                        height:
+                                          type: integer
+                                          description: The image height in pixels.
+                                        width:
+                                        
+                                          type: integer
+                                          description: The image width in pixels.
+                                  name:
+                                    type: string
+                                    description: The name of the artist.
+                                  popularity:
+                                    type: integer
+                                    description: The popularity of the artist.
+                                    example: 0
+                                  type:
+                                    type: string
+                                    description: The object type.
+                                    enum:
+                                      - artist
+                                    example: artist
+                                  uri: 
+                                    type: string
+                                    description: The Spotify URI for the artist.
+                  albums: 
+                    allOf:
+                    - $ref: '#/components/schemas/data'
+                    - type: object
+                      required:
+                        - "items"
+                      properties:
+                        items:
+                          type: array
+                          items: 
+                            type: object
+                            required:
+                              - "album_type"
+                              - "total_tracks"
+                              - "available_markets"
+                              - "external_urls"
+                              - "href"
+                              - "id"
+                              - "images"
+                              - "name"
+                              - "release_date"
+                              - "release_date_precision"
+                              - "type"
+                              - "uri"
+                              - "artists"
+                            properties:
+                              album_type:
+                                type: string
+                                description: The type of the album.
+                                enum:
+                                  - album
+                                  - single
+                                  - compilation
+                                example: compilation
+                              total_tracks:
+                                type: integer
+                                description: The number of tracks in the album.
+                                example: 9
+                              available_markets:
+                                type: array
+                                description: ""
+                                example: ["CA","BR","IT"]
+                              external_urls:
+                                type: object
+                                description: "Known external URLs for this album."
+                                properties:
+                                  spotify:
+                                    type: string
+                              href:
+                                type: string
+                                description: A link to the Web API endpoint providing full details of the album.
+                              id: 
+                                type: string
+                                description: The Spotify ID for the album.
+                                example: 2up3OPMp9Tb4dAKM2erWXQ
+                              images:
+                                type: array
+                                items: 
+                                  type: object
+                                  required:
+                                    - "url"
+                                    - "height"
+                                    - "width"
+                                  properties:
+                                    url:
+                                      type: string
+                                      description: The source URL of the image.
+                                      example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                    height:
+                                      type: integer
+                                      description: The image height in pixels.
+                                      example: 300
+                                    width:
+                                      type: integer
+                                      description: The image width in pixels.
+                                      example: 300
+                              name: 
+                                type: string
+                                description: The name of the album. In case of an album takedown, the value may be an empty string.
+                              release_date:
+                                type: string
+                                description: The date the album was first released.
+                                example: 1981-12
+                              release_date_precision:
+                                type: string
+                                description: The precision with which release_date value is known.
+                                enum:
+                                  - year
+                                  - month
+                                  - day
+                                example: year
+                              restrictions: 
+                                type: object
+                                properties:
+                                  reason:
+                                    type: string
+                              type: 
+                                type: string
+                                description: The object type.
+                                example: album
+                              uri:
+                                type: string
+                                description: The Spotify URI for the album.
+                                example: spotify:album:2up3OPMp9Tb4dAKM2erWXQ
+                              artists:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                      external_urls:
+                                        type: object
+                                        properties:
+                                          spotify: 
+                                            type: string
+                                            description: The Spotify URL for the object.
+                                      href:
+                                        type: string
+                                      id:
+                                        type: string
+                                      name:
+                                        type: string
+                                      type:
+                                        type: string
+                                        enum:
+                                          - artist
+                                      uri: 
+                                        type: string     
+                  playlists: 
+                    allOf:
+                    - $ref: '#/components/schemas/data'
+                    - type: object
+                      required:
+                        - "items"
+                      properties:
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                collaborative:
+                                  type: boolean
+                                  description: true if the owner allows other users to modify the playlist.
+                                description:
+                                  type: string
+                                  description: The playlist description. Only returned for modified, verified playlists, otherwise null.
+                                external_urls:
+                                  type: object
+                                  description: Known external URLs for this playlist.
+                                  properties:
+                                    spotify:
+                                      type: string
+                                      description: The Spotify URL for the object.
+                                href:
+                                  type: string
+                                  description: A link to the Web API endpoint providing full details of the playlist.
+                                id:
+                                  type: string
+                                  description: The Spotify ID for the playlist.
+                                images:
+                                  type: array
+                                  items:
+                                    type: object
+                                    required:
+                                      - "url"
+                                      - "height"
+                                      - "width"
+                                    properties:
+                                      url: 
+                                        type: string
+                                        description: The source URL of the image.
+                                        example: https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228
+                                      height: 
+                                        type: integer
+                                        description: The image height in pixels.
+                                        example: 300
+                                      width:
+                                        type: integer
+                                        description: The image width in pixels.
+                                        example: 300
+                                name:
+                                  type: string
+                                  description: The name of the playlist.
+                                owner:
+                                  type: object
+                                  description: the user who owns the playlist
+                                  properties:
+                                    external_urls:
+                                      type: object
+                                      description: Known external URLs for this playlist.
+                                      properties:
+                                       spotify:
+                                        type: string
+                                        description: The Spotify URL for the object.
+                                    followers:
+                                      type: object
+                                      description: Information about the followers of this user.
+                                      properties:
+                                        href:
+                                          type: string
+                                        total:
+                                          type: integer
+                                    href:
+                                      type: string
+                                      description: A link to the Web API endpoint for this user.
+                                    id: 
+                                      type: string
+                                      description: The Spotify user ID for this user.
+                                    type:
+                                      type: string
+                                      enum:
+                                        - user
+                                    uri: 
+                                      type: string
+                                      description: The Spotify user ID for this user.
+                                    display_name:
+                                      type: string
+                                      description: The name displayed on the user's profile. null if not available.
+                                public: 
+                                  type: boolean
+                                snapshot_id:
+                                  type: string
+                                  description: The version identifier for the current playlist.
+                                tracks:
+                                  type: object
+                                  properties:
+                                    href: 
+                                      type: string
+                                    total:
+                                      type: integer
+                                type: 
+                                  type: string
+                                  description: The object type "playlist"
+                                uri: 
+                                  type: string
+                                  description: The Spotify URI for the playlist.      
+                  shows: 
+                    allOf:
+                      - $ref: '#/components/schemas/data'
+                      - type: object
+                        required:
+                          - "items"
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - "available_markets"
+                                - "copyrights"
+                                - "description"
+                                - "html_description"
+                                - "explicit"
+                                - "external_urls"
+                                - "href"
+                                - "id"
+                                - "images"
+                                - "is_externally_hosted"
+                                - "languages"
+                                - "media_type"
+                                - "name"
+                                - "publisher"
+                                - "type"
+                                - "uri"
+                                - "total_episodes"
+                              properties:
+                                available_markets:
+                                  type: array
+                                copyrights:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      text: 
+                                        type: string
+                                        description: The copyright text for this content.
+                                      type:
+                                        type: string
+                                        description: ""
+                                description:
+                                  type: string
+                                html_description:
+                                  type: string
+                                  description: A description of the show. This field may contain HTML tags.
+                                explicit:
+                                  type: boolean
+                                  description: Whether or not the show has explicit content (true = yes it does; false = no it does not OR unknown).
+                                  example: false
+                                external_urls:
+                                  type: object
+                                  properties:
+                                    spotify: 
+                                      type: string
+                                      description: The Spotify URL for the object.
+                                href:
+                                  type: string
+                                  description: A link to the Web API endpoint providing full details of the show.
+                                id: 
+                                  type: string
+                                  description: The Spotify ID for the show.
+                                images: 
+                                  type: array
+                                  required:
+                                    - "url"
+                                    - "height"
+                                    - "width"
+                                  items:
+                                    type: object
+                                    properties:
+                                      url:
+                                        type: string
+                                        description: "The source URL of the image."
+                                      height:
+                                        type: integer
+                                        description: The image height in pixels.
+                                      width:
+                                      
+                                        type: integer
+                                        description: The image width in pixels.
+                                is_externally_hosted:
+                                  type: boolean
+                                  example: false
+                                languages:
+                                  type: array
+                                  description: A list of the languages used in the show, identified by their ISO 639 code.
+                                  example: []
+                                media_type: 
+                                  type: string
+                                  description: The media type of the show.
+                                name:
+                                  type: string
+                                  description: The name of the episode.
+                                publisher:
+                                  type: string
+                                  description: The publisher of the show.
+                                type:
+                                  type: string
+                                  enum:
+                                    - show
+                                  example: show
+                                uri:
+                                  type: string
+                                  description: The Spotify URI for the show.
+                                total_episodes:
+                                  type: integer
+                                  description: The total number of episodes in the show.
+                  episodes:
+                    allOf:
+                      - $ref: '#/components/schemas/data'
+                      - type: object
+                        required:
+                          - "items"
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - "audio_preview_url"
+                                - "description"
+                                - "html_description"
+                                - "duration_ms"
+                                - "explicit"
+                                - "external_urls"
+                                - "href"
+                                - "id"
+                                - "images"
+                                - "is_externally_hosted"
+                                - "is_playable"
+                                - "languages"
+                                - "name"
+                                - "release_date"
+                                - "release_date_precision"
+                                - "type"
+                                - "uri"
+                              properties:
+                                audio_preview_url: 
+                                  type: string
+                                  description: A URL to a 30 second preview (MP3 format) of the episode. null if not available.
+                                  example: https://p.scdn.co/mp3-preview/2f37da1d4221f40b9d1a98cd191f4d6f1646ad17
+                                description:
+                                  type: string
+                                  description: A description of the episode. HTML tags are stripped away from this field, use html_description field in case HTML tags are needed.
+                                  example: A Spotify podcast sharing fresh insights on important topics of the moment—in a way only Spotify can. You’ll hear from experts in the music, podcast and tech industries as we discover and uncover stories about our work and the world around us.
+                                html_description:
+                                  type: string
+                                  description: A description of the episode. This field may contain HTML tags.
+                                  example: <p>A Spotify podcast sharing fresh insights on important topics of the moment—in a way only Spotify can. You’ll hear from experts in the music, podcast and tech industries as we discover and uncover stories about our work and the world around us.</p>
+                                duration_ms:
+                                  type: string
+                                  description: The episode length in milliseconds.
+                                  example: 1686230
+                                explicit: 
+                                  type: boolean
+                                  description: Whether or not the episode has explicit content (true = yes it does; false = no it does not OR unknown).
+                                  example: false
+                                external_urls:
+                                  type: object
+                                  description: Known external URLs for this playlist.
+                                  properties:
+                                    spotify:
+                                      type: string
+                                      description: The Spotify URL for the object.
+                                href: 
+                                  type: string
+                                  description: A link to the Web API endpoint providing full details of the episode.
+                                  example: https://api.spotify.com/v1/episodes/5Xt5DXGzch68nYYamXrNxZ
+                                id:
+                                  type: string
+                                  description: The Spotify ID for the episode.
+                                  example: 5Xt5DXGzch68nYYamXrNxZ
+                                images: 
+                                  type: array
+                                  items:
+                                    type: object
+                                    required:
+                                      - "url"
+                                      - "height"
+                                      - "width"
+                                    properties:
+                                      url:
+                                        type: string
+                                        description: "The source URL of the image."
+                                      height:
+                                        type: integer
+                                        description: The image height in pixels.
+                                      width:
+                                      
+                                        type: integer
+                                        description: The image width in pixels.
+                                is_externally_hosted:
+                                  type: boolean
+                                  description: True if the episode is hosted outside of Spotify's CDN.
+                                is_playable:
+                                  type: boolean
+                                  description: True if the episode is playable in the given market. Otherwise false.
+                                language: 
+                                  type: string
+                                  description: The language used in the episode, identified by a ISO 639 code. This field is deprecated and might be removed in the future. Please use the languages field instead.
+                                  example: en
+                                languages:
+                                  type: array
+                                  example: ["fr","en"]
+                                name:
+                                  type: string
+                                  description: The name of the episode.
+                                  example: Starting Your Own Podcast Tips, Tricks, and Advice From Anchor Creators"
+                                release_date:
+                                  type: string
+                                  description: The date the episode was first released, for example "1981-12-15". Depending on the precision, it might be shown as "1981" or "1981-12".
+                                  example: 1981-12-15
+                                release_date_precision:
+                                  type: string
+                                  description: The precision with which release_date value is known.
+                                  enum:
+                                    - year
+                                    - day
+                                    - month
+                                  example: day
+                                resume_point:
+                                  type: object
+                                  description: The user's most recent position in the episode. Set if the supplied access token is a user token and has the scope 'user-read-playback-position
+                                  properties:
+                                    type: 
+                                      type: string
+                                      description: The object type.
+                                      enum:
+                                        - episode
+                                    uri:
+                                      type: string
+                                      description: The Spotify URI for the episode.
+                                      example: spotify:episode:0zLhl3WsOCQHbe1BPTiHgr
+                                restrictions:
+                                  type: object
+                                  properties:
+                                    reason:
+                                      type: string
+                  audiobooks:
+                    allOf:
+                      - $ref: '#/components/schemas/data'
+                      - type: object
+                        required:
+                          - "items"
+                        properties:
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - "authors"
+                                - "available_markets"
+                                - "copyrights"
+                                - "description"
+                                - "html_description"
+                                - "explicit"
+                                - "external_urls"
+                                - "href"
+                                - "id"
+                                - "images"
+                                - "languages"
+                                - "media_type"
+                                - "name"
+                                - "narrators"
+                                - "publisher"
+                                - "type"
+                                - "uri"
+                                - "total_chapters"
+                              properties:
+                                author:
+                                  type: array
+                                  items: 
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: The name of the author.
+                                available_markets:
+                                  type: array
+                                  description: The copyright statements of the audiobook.
+                                copyrights:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      text: 
+                                        type: string
+                                        description: The copyright text for this content.
+                                      type:
+                                        type: string
+                                        description: ""
+                                description:
+                                  type: string
+                                  description:  description of the audiobook. HTML tags are stripped away from this field, use html_description field in case HTML tags are needed.
+                                html_description:
+                                  type: string
+                                  description: A description of the audiobook. This field may contain HTML tags.
+                                edition:
+                                  type: string
+                                  description: The edition of the audiobook.
+                                  example: Unabridged
+                                explicit:
+                                  type: boolean
+                                  example: false
+                                external_urls:
+                                  type: object
+                                  properties:
+                                    spotify: 
+                                      type: string
+                                      description: The Spotify URL for the object.
+                                href:
+                                  type: string
+                                  description: A link to the Web API endpoint providing full details of the audiobook.
+                                id: 
+                                  type: string
+                                  description: The Spotify ID for the audiobook.
+                                images: 
+                                  type: array
+                                  items:
+                                    type: object
+                                    required:
+                                      - "url"
+                                      - "height"
+                                      - "width"
+                                    properties:
+                                      url:
+                                        type: string
+                                        description: "The source URL of the image."
+                                      height:
+                                        type: integer
+                                        description: The image height in pixels.
+                                      width:
+                                        type: integer
+                                        description: The image width in pixels.
+                                languages:
+                                  type: array
+                                  description:   A list of the languages used in the audiobook, identified by their ISO 639 code.
+                                media_type:
+                                  type: string
+                                  description: The media type of the audiobook.
+                                name:
+                                  type: string
+                                  description: The name of the audiobook.
+                                narrators:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: The name of the Narrator.      
+                                publisher:
+                                  type: string
+                                  description: The publisher of the audiobook.
+                                type:
+                                  type: string
+                                  description: The object type.
+                                  example: audiobook
+                                uri:
+                                  type: string
+                                  description: The Spotify URI for the audiobook.
+                                total_chapters:
+                                  type: integer
+                                  description: The number of chapters in this audiobook.                          
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429' 
+ 
+  /me/playlists:
+    get:
+      summary: Get Current User's Playlists
+      description: "Get a list of the playlists owned or followed by the current Spotify user."
+      parameters:
+        - name: limit
+          in: query
+          description: "The maximum number of items to return. Default: 20. Minimum: 1. Maximum: 50."
+          schema:
+            type: integer
+            default: 20
+            minimum: 0
+            maximum: 50
+            example: 10
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 5
+            example: 0
+      security:
+        - BearerAuth: []
+      tags:
+        - "Playlist"
+      responses:
+        '200': 
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - "href"
+                  - "limit"
+                  - "offset"
+                  - "previous"
+                  - "total"
+                  - "items"
+                properties:
+                  href:
+                    type: string
+                    description: A link to the Web API endpoint returning the full result of the request
+                    example: https://api.spotify.com/v1/me/shows?offset=0&limit=20
+                  limit:
+                    type: integer
+                    description: The maximum number of items in the response (as set in the query or by default).
+                    example: 20
+                  next:
+                    type: string
+                    description: URL to the next page of items. ( null if none)
+                    example: https://api.spotify.com/v1/me/shows?offset=1&limit=1
+                  offset: 
+                    type: integer
+                    description: The offset of the items returned (as set in the query or by default)
+                    example: 0
+                  previous: 
+                    type: string
+                    description: URL to the previous page of items. ( null if none)
+                    example: https://api.spotify.com/v1/me/shows?offset=1&limit=1
+                  total: 
+                    type: integer
+                    description: The total number of items available to return.
+                    example: 4
+                  items: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        collaborative:
+                          type: boolean
+                          description: true if the owner allows other users to modify the playlist.
+                          example: false
+                        description:
+                          type: string
+                          description: The playlist description. Only returned for modified, verified playlists, otherwise null.
+                        external_urls:
+                          type: object
+                          properties:
+                            spotify: 
+                              type: string
+                              description: The Spotify URL for the object.
+                        href:
+                          type: string
+                          description: A link to the Web API endpoint providing full details of the playlist.
+                        id:
+                          type: string
+                          description: The Spotify ID for the playlist.
+                        images: 
+                          type: array
+                        
+                          items:
+                            type: object
+                            required:
+                              - "url"
+                              - "height"
+                              - "width"
+                            properties:
+                              url:
+                                type: string
+                                description: "The source URL of the image."
+                              height:
+                                type: integer
+                                description: The image height in pixels.
+                              width:
+                              
+                                type: integer
+                                description: The image width in pixels.
+                        name: 
+                          type: string
+                          description: The name of the playlist.
+                        owner:
+                          type: object
+                          description: the user who owns the playlist
+                          properties:
+                            external_urls:
+                              type: object
+                              description: Known external URLs for this playlist.
+                              properties:
+                                spotify:
+                                  type: string
+                                  description: The Spotify URL for the object.
+                            followers:
+                              type: object
+                              description: Information about the followers of this user.
+                              properties:
+                                href:
+                                  type: string
+                                total:
+                                  type: integer
+                            href:
+                              type: string
+                              description: A link to the Web API endpoint for this user.
+                            id: 
+                              type: string
+                              description: The Spotify user ID for this user.
+                            type:
+                              type: string
+                              enum:
+                                - user
+                            uri: 
+                              type: string
+                              description: The Spotify user ID for this user.
+                            display_name:
+                              type: string
+                              description: The name displayed on the user's profile. null if not available.
+                        public:   
+                          type: boolean
+                          description: The playlist's public/private status true the playlist is public, false the playlist is private, null the playlist status is not relevant.
+                          example: false
+                        snapshot_id:
+                          type: string
+                          description: The version identifier for the current playlist. Can be supplied in other requests to target a specific playlist version
+                        tracks:
+                          type: object
+                          properties:
+                            href:
+                              type: string
+                              description: A link to the Web API endpoint where full details of the playlist's tracks can be retrieved.
+                            total:
+                              type: integer
+                              description: Number of tracks in the playlist.
+                        type:
+                          type: string
+                          description: The object type "playlist"
+                        uri: 
+                          type: string
+                          description: The Spotify URI for the playlist.
+        '401':
+            $ref: '#/components/responses/err401'
+        '403':
+            $ref: '#/components/responses/err403'            
+        '429':
+            $ref: '#/components/responses/err429'   
+  /playlists/{playlist_id}/followers:
+    delete:
+      summary: Unfollow Playlist
+      description: "Remove the current user as a follower of a playlist."
+      parameters:
+        - name: playlist_id
+          required: true
+          in: query
+          description: "The Spotify ID of the playlist."
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      tags:
+        - "Playlist"
+      responses:
+        '200': 
+          description: Playlist unfollowed
+        '401':
+          $ref: '#/components/responses/err401'
+        '403':
+          $ref: '#/components/responses/err403'            
+        '429':
+          $ref: '#/components/responses/err429' 
+  
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer 
+  schemas:
+    data:
+      type: object
+      required:
+        - "href"
+        - "limit"
+        - "next"
+        - "offset"
+        - "previous"
+        - "total"
+      properties:
+        href:
+          type: string
+          description: A link to the Web API endpoint returning the full result of the request
+          example: https://api.spotify.com/v1/me/shows?offset=0&limit=20
+        limit: 
+          type: integer
+          description: The maximum number of items in the response (as set in the query or by default).
+          example: 20
+        next:
+          type: string
+          description: URL to the next page of items. ( null if none)
+          example: https://api.spotify.com/v1/me/shows?offset=1&limit=1
+        offset:
+          type: integer
+          description: The offset of the items returned (as set in the query or by default)
+          example: 0
+        previous:
+          type: string
+          description: URL to the previous page of items. ( null if none)
+          example: https://api.spotify.com/v1/me/shows?offset=1&limit=1
+        total:
+          type: string
+          description: The total number of items available to return.
+          example: 4
+    
+  responses:
+    err401: 
+      description: " Error response for 401 status code"
+      content:
+        application/json:
+          schema:
+             type: object
+             required:
+               - "error"
+             properties:
+              error: 
+                type: object
+                required:
+                  - "status"
+                  - "message"
+                properties:
+                  status:
+                    type: integer
+                    description: ""
+                    example: '400'
+                  message:
+                    type: string
+                    description: ""
+                    example: 'Bad or expired token.'
+    err403:
+      description: "Error Response"
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - "error"
+            properties:
+              error:
+                type: object
+                required:
+                  - "status"
+                  - "message"
+                properties:
+                  
+                  status:
+                    type: integer
+                    description: ""
+                    example: '403'
+                  message:
+                    type: string
+                    description: ""
+                    example: 'Bad OAuth request'
+    err429:
+      description: "Error Response"
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - "error"
+            properties:
+              error:
+                type: object
+                required:
+                  - "status"
+                  - "message"
+                properties:
+                  
+                  status: 
+                      type: number
+                      description: ""
+                      example: "429"
+                  message: 
+                      type: string
+                      description: ''
+                      example: "The app has exceeded its rate limits."      
+  
+
+    
+

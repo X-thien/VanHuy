@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+
+actor HeThong as HT
+
+rectangle Trang_chủ {
+  usecase "Hiển thị top track" as TopTrack
+  usecase "Hiển thị album mới phát hành" as AlbumNew
+}
+HT --> TopTrack 
+HT --> AlbumNew
+
+@enduml

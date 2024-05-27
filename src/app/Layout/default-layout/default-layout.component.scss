@@ -1,0 +1,20 @@
+.main {
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+  margin-left: 220px;
+  background-color: #121212;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.scrolled {
+  background-color: #121212;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: lighten(rgb(40, 40, 40), 6%);
+}

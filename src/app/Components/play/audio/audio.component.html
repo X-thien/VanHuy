@@ -1,0 +1,67 @@
+<div class="music-player">
+  <div class="song-bar">
+    <div class="song-infos" *ngIf="dataTrack">
+      <div
+        class="image-container"
+        *ngIf="dataTrack.album && dataTrack.album.images"
+      >
+        <img [src]="dataTrack.album.images[0].url" alt="" />
+      </div>
+      <div class="song-description">
+        <p class="title">
+          {{ dataTrack.name }}
+        </p>
+        <p class="artist">{{ dataTrack.artists[0].name }}</p>
+      </div>
+    </div>
+    <div class="icons">
+      <i class="far fa-heart"></i>
+      <i class="fas fa-compress"></i>
+    </div>
+  </div>
+  <div class="progress-controller">
+    <div class="control-buttons">
+      <i class="fas fa-random"></i>
+      <!-- eslint-disable -->
+      <i class="bi bi-skip-start-fill" (click)="handleClickPre()"></i>
+      <div
+        class="play"
+        [ngClass]="{ show: !play, hide: play }"
+        (click)="handleClick()"
+      >
+        <i class="bi bi-play-fill"></i>
+      </div>
+      <div
+        class="hide"
+        [ngClass]="{ show: play, hide: !play }"
+        (click)="handleClick()"
+      >
+        <i class="bi bi-pause-fill"></i>
+      </div>
+      <i class="bi bi-skip-end-fill" (click)="handleClickNext()"></i>
+      <!-- <i class="bi bi-undo-alt"></i> -->
+    </div>
+    <div class="progress-container">
+      <span *ngIf="progressTime">{{ format(progressTime) }}</span>
+      <!-- <div class="progress-bar"> -->
+      <!-- <div
+          class="progress"
+          [style.--progressPercent]="progressPercent + '%'"
+          ></div> -->
+      <input
+        type="range"
+        min="0"
+        max="100"
+        [value]="progressPercent"
+        step="1"
+        class="progress-bar-1"
+        value="0"
+        (change)="onChange($event)"
+        [style.--progressPercent]="progressPercent + '%'"
+      />
+      <!-- </div> -->
+      <span *ngIf="dataTrack">{{ format(dataTrack.duration_ms) }}</span>
+    </div>
+  </div>
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+</div>

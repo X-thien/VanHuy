@@ -1,0 +1,141 @@
+.edit {
+  border-radius: 4px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  //   height: 300px;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #252525;
+  .layout-edit {
+    .notification {
+      padding: 5px;
+      color: white;
+      width: 100%;
+      background-color: red;
+      margin-bottom: 5px;
+      border-radius: 4px;
+    }
+    .edit-name {
+      display: flex;
+      justify-content: space-between;
+      i {
+        color: white;
+      }
+      p {
+        font-size: 20px;
+        color: white;
+        font-weight: bold;
+      }
+    }
+    .content-edit {
+      height: 100%;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      .edit-img {
+        flex: 2;
+        position: relative;
+        width: 180px;
+        height: 180px;
+        img {
+          z-index: 1;
+          width: 100%;
+          height: 100%;
+        }
+        .img-ct {
+          height: 100%;
+          width: 100%;
+          background-color: gray;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          button {
+            border: none;
+            background-color: transparent;
+            color: white;
+            font-size: 20px;
+          }
+        }
+        &:hover {
+          .hover {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          background: hsla(0, 0%, 100%, 0.1);
+        }
+        input {
+          display: none;
+        }
+        .hover {
+          display: none;
+
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          position: absolute;
+          top: 0;
+          span {
+            color: white;
+            font-size: 20px;
+            line-height: 100%;
+          }
+        }
+        .spinner-border {
+          position: absolute;
+          top: 45%;
+        }
+      }
+
+      .right-edit {
+        display: flex;
+        flex: 3;
+        flex-direction: column;
+        width: 80%;
+        .description {
+          // flex: 1;
+          height: 80%;
+          textarea {
+            color: white;
+            padding: 5px;
+            border: none;
+            outline: none;
+            background: hsla(0, 0%, 100%, 0.1);
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            font-size: 13px;
+          }
+        }
+        .name-playlist {
+          height: 20%;
+          margin-bottom: 10px;
+          input {
+            font-size: 13px;
+            border-radius: 4px;
+            color: white;
+            padding: 5px;
+            border: none;
+            outline: none;
+            background: hsla(0, 0%, 100%, 0.1);
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+  }
+  .button {
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+    button {
+      padding: 10px 20px;
+      border: none;
+      outline: none;
+      border-radius: 20px;
+    }
+  }
+}

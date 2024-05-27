@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+
+actor User as User
+
+rectangle Hệthống {
+  usecase "Đăng nhập" as Login
+}
+
+User --> Login 
+
+@enduml

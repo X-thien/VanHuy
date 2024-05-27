@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+
+actor HeThong as HT
+actor User as User
+rectangle Tìm_kiếm {
+  usecase "Tìm kiếm" as Search
+  usecase "Hiển thị kết quả" as Result
+}
+User --> Search
+HT --> Result
+
+Result --> Search: include
+@enduml

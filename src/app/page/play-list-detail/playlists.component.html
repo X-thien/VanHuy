@@ -1,0 +1,64 @@
+<div class="main" *ngIf="!user">
+  <div
+    class="banner-img"
+    [ngStyle]="{ 'background-image': 'url(' + imgUrl + ')' }"
+  >
+    <div class="content" *ngIf="infoPlaylist">
+      <p>{{ infoPlaylist.name }}</p>
+      <!-- <p>{{album.artists[0].name}}</p> -->
+    </div>
+  </div>
+
+  <div class="play">
+    <i class="bi bi-play-fill"></i>
+  </div>
+
+  <div class="dashboard" *ngIf="data">
+    <div class="header-content-track">
+      <div class="stt">
+        <p>#</p>
+      </div>
+      <div class="tieu-de">
+        <p>Tiêu đề</p>
+      </div>
+      <div class="album"><p>Album</p></div>
+      <div class="time"><i class="bi bi-clock"></i></div>
+    </div>
+    <hr />
+    <div class="item" *ngFor="let item of data.items; let i = index">
+      <div class="ct-name">
+        <div class="stt">
+          <p>{{ i + 1 }}</p>
+          <i class="bi bi-play-fill"></i>
+        </div>
+        <img [src]="item.track.album.images[2].url" alt="" />
+        <!-- eslint-disable -->
+        <div class="name">
+          <p
+            (click)="
+              updateData(item.track);
+              playTrack(item.track.id, infoPlaylist.uri, i)
+            "
+          >
+            {{ item.track.name }}
+          </p>
+          <a [routerLink]="['/artist', item.track.artists[0].id]">
+            <p>{{ item.track.artists[0].name }}</p>
+          </a>
+        </div>
+      </div>
+      <div class="ct-alb">
+        <p [routerLink]="['/albums', item.track.album.id]">
+          {{ item.track.album.name }}
+        </p>
+      </div>
+      <div class="ct-dur">
+        <p>{{ format(item.track.duration_ms) }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="user">
+  <app-my-playlist></app-my-playlist>
+</div>

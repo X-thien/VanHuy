@@ -1,0 +1,11 @@
+@startuml
+actor User
+participant "Client" as Client
+participant "Spotify API" as Spotify
+
+User -> Client: Chọn bài hát
+Client -> Spotify: GET https://api.spotify.com/v1/me/player/play
+Spotify -> Client: Trả về trạng thái
+Client -> User: Phát nhạc
+
+@enduml

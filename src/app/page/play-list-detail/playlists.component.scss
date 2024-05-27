@@ -1,0 +1,237 @@
+p {
+  font-size: 1px;
+}
+
+.main {
+  height: calc(100vh - 80px);
+  .banner-img {
+    position: relative;
+    display: flex;
+    background-position: 10% 20%;
+    background-image: var(--backgroundImg);
+    background-size: cover;
+    object-fit: cover;
+    background-repeat: no-repeat;
+    height: 50%;
+    width: 100%;
+    .content {
+      position: absolute;
+      bottom: 60px;
+      left: 10px;
+      color: white;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      p {
+        font-size: 50px;
+      }
+    }
+  }
+  .play {
+    padding: 20px;
+
+    margin: 20px;
+    background-color: green;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    i bi {
+      background-color: #000;
+    }
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  }
+  .dashboard {
+    padding: 20px;
+    p {
+      font-size: 13px;
+      margin-left: 10px;
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+    h3 {
+      color: white;
+      font-weight: bold;
+    }
+
+    .item {
+      height: auto;
+      display: flex;
+      align-items: center;
+
+      width: 100%;
+      padding: 10px 10px;
+      justify-content: space-between;
+      color: white;
+      &:hover {
+        background-color: #252525;
+        border-radius: 5px;
+        .stt {
+          p {
+            display: none;
+          }
+          i {
+            font-size: 15px;
+            display: block !important;
+          }
+        }
+      }
+      a:hover p:nth-child(1) {
+        text-decoration: underline;
+      }
+
+      .ct-name {
+        align-items: center;
+        // width: auto;
+        display: flex;
+        width: 50%;
+        .stt {
+          display: flex;
+          align-items: center;
+          width: 5%;
+          i {
+            display: none;
+          }
+        }
+        p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        img {
+          margin-left: 10px;
+          height: 50px;
+          width: 50px;
+        }
+        .name {
+          height: 50px;
+          align-items: center;
+          p {
+            font-size: 15px;
+          }
+          a {
+            p {
+              color: gray;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+      .ct-alb {
+        width: 40%;
+        color: #b3b3b3;
+        P {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      .ct-dur {
+        p {
+          color: #b3b3b3;
+        }
+      }
+
+      div p {
+        // margin-right: 20px;
+        height: 30px;
+        font-size: 13px;
+        padding: 0;
+      }
+    }
+
+    .header-content-track {
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      .stt {
+        p {
+          color: gray;
+          font-size: 13px;
+        }
+        width: 3%;
+      }
+      .tieu-de {
+        p {
+          color: gray;
+          font-size: 17px;
+        }
+        width: 50%;
+      }
+      .album {
+        p {
+          color: gray;
+          font-size: 17px;
+        }
+        width: 45%;
+      }
+      .time {
+        font-size: 17px;
+        color: gray;
+      }
+    }
+
+    hr {
+      color: white;
+    }
+  }
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+}
+
+// .tieu-de {
+//   display: flex;
+// }
+@media only screen and (max-width: 1024px) {
+  .ct-alb {
+    display: none;
+  }
+
+  .album {
+    display: none;
+  }
+  .main {
+    .dashboard {
+      .item {
+        .ct-name {
+          .stt {
+            width: auto;
+            margin-right: 8px;
+          }
+        }
+      }
+      .header-content-track {
+        .tieu-de {
+          width: 100%;
+        }
+      }
+    }
+  }
+  .ct-name {
+    width: 80%;
+  }
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: lighten(rgb(40, 40, 40), 6%);
+}
