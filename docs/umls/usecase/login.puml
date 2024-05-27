@@ -4,7 +4,7 @@ left to right direction
 actor User as User
 
 rectangle Hệthống {
-  usecase "Đăng nhập" as Login
+  usecase "Đăng nhậpa" as Login
 }
 
 User --> Login 
